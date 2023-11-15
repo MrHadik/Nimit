@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import React from 'react'
 
 const Page = () => {
   const router = useRouter();

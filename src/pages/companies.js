@@ -6,6 +6,7 @@ import { Box, Button, Container, Pagination, Stack, SvgIcon, Typography, Unstabl
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout'
 import { CompanyCard } from 'src/sections/companies/company-card'
 import { CompaniesSearch } from 'src/sections/companies/companies-search'
+import React from 'react'
 
 const companies = [
   {

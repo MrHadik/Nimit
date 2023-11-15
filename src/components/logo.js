@@ -1,4 +1,5 @@
 import { useTheme } from '@mui/material/styles';
+import React from 'react'
 
 export const Logo = () => {
   const theme = useTheme();

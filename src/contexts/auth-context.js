@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import React from 'react'
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',

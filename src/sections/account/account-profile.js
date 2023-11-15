@@ -1,13 +1,5 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Typography
-} from '@mui/material';
+import { Avatar, Box, Button, Card, CardActions, CardContent, Divider, Typography } from '@mui/material'
+import React from 'react'
 
 const user = {
   avatar: '/assets/avatars/avatar-anika-visser.png',
@@ -15,8 +7,8 @@ const user = {
   country: 'USA',
   jobTitle: 'Senior Developer',
   name: 'Anika Visser',
-  timezone: 'GTM-7'
-};
+  timezone: 'GTM-7',
+}
 
 export const AccountProfile = () => (
   <Card>
@@ -25,7 +17,7 @@ export const AccountProfile = () => (
         sx={{
           alignItems: 'center',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         <Avatar
@@ -33,37 +25,25 @@ export const AccountProfile = () => (
           sx={{
             height: 80,
             mb: 2,
-            width: 80
+            width: 80,
           }}
         />
-        <Typography
-          gutterBottom
-          variant="h5"
-        >
+        <Typography gutterBottom variant="h5">
           {user.name}
         </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
+        <Typography color="text.secondary" variant="body2">
           {user.city} {user.country}
         </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
+        <Typography color="text.secondary" variant="body2">
           {user.timezone}
         </Typography>
       </Box>
     </CardContent>
     <Divider />
     <CardActions>
-      <Button
-        fullWidth
-        variant="text"
-      >
+      <Button fullWidth variant="text">
         Upload picture
       </Button>
     </CardActions>
   </Card>
-);
+)
