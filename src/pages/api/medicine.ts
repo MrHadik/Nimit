@@ -56,7 +56,12 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const createdMedicine = await Medicine.create(req.body);
+    const createdMedicine = await Medicine.create({
+      "medicineName": (req.body.medicineName).toUpperCase(),
+      "isStar": req.body.isStar,
+      "inStock": req.body.inStock,
+      "notes": req.body.notes
+    });
     res.status(201).json({ createdMedicine, success: true });
   } catch (error) {
     console.error(error);

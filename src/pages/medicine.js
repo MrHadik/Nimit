@@ -6,29 +6,46 @@ import { DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
+import AddMedicine from '@/components/AddMedicine'
 
 const Page = () => {
   const [data, setData] = useState([])
+  const [open, setOpen] = React.useState(false)
+  const [loading, setLoading] = React.useState(true)
+  const [menu, setMenu] = React.useState({ medicineName: '', isStar: '', inStock: 0, notes: '', _id: '' })
   useEffect(() => {
     GetData()
-  })
+  }, [open])
 
   const GetData = async () => {
+    setLoading(true)
     let headersList = {
       Accept: '*/*',
     }
 
-    let response = await fetch('/api/medicine', {
-      method: 'GET',
-      headers: headersList,
-    })
+    try {
+      let response = await fetch('/api/medicine', {
+        method: 'GET',
+        headers: headersList,
+      })
 
-    let responseData = await response.json()
-    const dataWithIds = responseData.Medicines.map((row, index) => ({
-      ...row,
-      id: index + 1,
-    }))
-    setData(dataWithIds)
+      if (!response.ok) {
+        throw new Error('Failed to fetch data')
+      }
+
+      let responseData = await response.json()
+      if (responseData.success) {
+        const dataWithIds = responseData.Medicines.map((row, index) => ({
+          ...row,
+          id: index + 1,
+        }))
+        setData(dataWithIds)
+        setLoading(false)
+      }
+    } catch (error) {
+      alert(error)
+      console.error('Error fetching data:', error)
+    }
   }
 
   const columns = [
@@ -63,21 +80,25 @@ const Page = () => {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
+      getActions: (medicine) => {
         return [
           <GridActionsCellItem
-            key={`edit-${id}`}
+            key={`edit-${medicine.id}`}
             icon={<EditIcon />}
             label="Edit"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
+            onClick={() => handleEditClick(medicine.row)}
+            sx={{
+              color: 'primary.main',
+            }}
           />,
           <GridActionsCellItem
-            key={`delete-${id}`}
+            key={`delete-${medicine.id}`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => handleDeleteClick(id)}
-            color="inherit"
+            onClick={() => handleDeleteClick(medicine.row)}
+            sx={{
+              color: 'error.main',
+            }}
           />,
         ]
       },
@@ -85,11 +106,24 @@ const Page = () => {
   ]
 
   const handleEditClick = (id) => {
-    console.log(id)
-    // console.log(id)
+    setMenu(id)
+    setOpen(true)
   }
-  const handleDeleteClick = (id) => {
-    console.log(id)
+  const handleDeleteClick = async (row) => {
+    if (confirm('are you sure to delete ' + row.medicineName + ' ?')) {
+      let headersList = {
+        Accept: '*/*',
+      }
+
+      let response = await fetch('/api/medicine?_id=' + row._id, {
+        method: 'DELETE',
+        headers: headersList,
+      })
+
+      let data = await response.text()
+      console.log(data)
+      GetData()
+    }
   }
 
   return (
@@ -108,7 +142,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Users</Typography>
+                <Typography variant="h4">Medicine</Typography>
               </Stack>
               <div>
                 <Button
@@ -117,30 +151,31 @@ const Page = () => {
                       <PlusIcon />
                     </SvgIcon>
                   }
+                  onClick={() => {
+                    setMenu({ medicineName: '', isStar: '', inStock: 0, notes: '', _id: '' })
+                    setOpen(true)
+                  }}
                   variant="contained"
                 >
                   Add
                 </Button>
               </div>
             </Stack>
-            <DataGrid
-              rows={data}
-              columns={columns}
-              // loading={true}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
-              }}
-              slots={{ toolbar: GridToolbar }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-            />
+            <Box sx={{ height: 450, width: '100%' }}>
+              <DataGrid
+                rows={data}
+                columns={columns}
+                loading={loading}
+                slots={{ toolbar: GridToolbar }}
+                pageSizeOptions={[5, 10, 50, 100]}
+                disableRowSelectionOnClick
+                editMode="false"
+              />
+            </Box>
           </Stack>
         </Container>
       </Box>
+      <AddMedicine open={open} setOpen={setOpen} menu={menu} />
     </>
   )
 }
