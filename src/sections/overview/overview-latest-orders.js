@@ -26,6 +26,7 @@ const statusMap = {
 }
 
 export const OverviewLatestOrders = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { orders = [], sx } = props
 
   return (

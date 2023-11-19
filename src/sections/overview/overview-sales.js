@@ -85,6 +85,7 @@ const useChartOptions = () => {
 }
 
 export const OverviewSales = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { chartSeries, sx } = props
   const chartOptions = useChartOptions()
 

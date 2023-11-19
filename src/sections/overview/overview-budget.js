@@ -6,6 +6,7 @@ import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/mate
 import React from 'react'
 
 export const OverviewBudget = (props) => {
+  // eslint-disable-next-line react/prop-types
   const { difference, positive = false, sx, value } = props
 
   return (
