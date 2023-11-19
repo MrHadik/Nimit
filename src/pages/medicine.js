@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
 import AddMedicine from '@/components/AddMedicine'
+// import Chip from '@mui/material/Chip';
 
 const Page = () => {
   const [data, setData] = useState([])
@@ -37,8 +38,10 @@ const Page = () => {
       if (responseData.success) {
         const dataWithIds = responseData.Medicines.map((row, index) => ({
           ...row,
+          // isStar: row.isStar ? <Chip label="success" color="success" /> : <Chip label="primary" color="primary" />,
           id: index + 1,
         }))
+
         setData(dataWithIds)
         setLoading(false)
       }
@@ -166,6 +169,13 @@ const Page = () => {
                 rows={data}
                 columns={columns}
                 loading={loading}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
+                    },
+                  },
+                }}
                 slots={{ toolbar: GridToolbar }}
                 pageSizeOptions={[5, 10, 50, 100]}
                 disableRowSelectionOnClick

@@ -30,6 +30,8 @@
     "apexcharts": "3.37.0",
     "date-fns": "2.29.3",
     "formik": "2.2.9",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.7.1",
     "mongoose": "^8.0.0",
     "next": "14.0.2",
     "nprogress": "0.2.0",
