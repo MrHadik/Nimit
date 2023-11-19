@@ -8,7 +8,9 @@ connectMongoDB();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+
     const usersData = await Users.find();
+
     const oldejHome = getName('Ratanpar')
     const pdf = await generateUsersMedicinesPdf(usersData, oldejHome);
     const pdfBuffer = Buffer.from(pdf);
