@@ -164,7 +164,7 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <Box sx={{ height: 450, width: '100%' }}>
+            <Box sx={{ height: 540, width: '100%' }}>
               <DataGrid
                 rows={data}
                 columns={columns}
@@ -172,7 +172,7 @@ const Page = () => {
                 initialState={{
                   pagination: {
                     paginationModel: {
-                      pageSize: 5,
+                      pageSize: 10,
                     },
                   },
                 }}
