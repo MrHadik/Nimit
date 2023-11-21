@@ -7,7 +7,9 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
 import AddMedicine from '@/components/AddMedicine'
-// import Chip from '@mui/material/Chip';
+import Checkbox from '@mui/material/Checkbox'
+import StarBorderIcon from '@mui/icons-material/StarBorder'
+import StarIcon from '@mui/icons-material/Star'
 
 const Page = () => {
   const [data, setData] = useState([])
@@ -63,7 +65,9 @@ const Page = () => {
       field: 'isStar',
       headerName: 'is Star',
       width: 150,
-      editable: true,
+      renderCell: (params) => (
+        <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon />} checked={params.value} disabled />
+      ),
     },
     {
       field: 'inStock',
