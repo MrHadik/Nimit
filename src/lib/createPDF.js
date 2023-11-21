@@ -26,7 +26,7 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
   usersData.forEach((user) => {
     const {grNumber , name, medicines = [], notes } = user // Ensure medicines array is initialized
 
-    const formattedMedicines = medicines.map((medicine) => ['', '', medicine.medicineName, medicine.quonty.toString()])
+    const formattedMedicines = medicines.map((medicine) => ['', '', medicine.medicineName, medicine.quantity.toString()])
 
     formattedMedicines[0][0] = grNumber
     formattedMedicines[0][1] = name
