@@ -173,7 +173,15 @@ const Page = () => {
                     },
                   },
                 }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
                 slots={{ toolbar: GridToolbar }}
+                disableColumnFilter
+                disableColumnSelector
+                disableDensitySelector
                 pageSizeOptions={[5, 10, 50, 100]}
                 disableRowSelectionOnClick
                 editMode="false"
