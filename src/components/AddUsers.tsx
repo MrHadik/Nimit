@@ -25,9 +25,9 @@ interface Props {
   }
 }
 
-
 export default function AddUsers({ open, setOpen, menu }: Props) {
   const [oldejHomeList, setOldejHomeList] = React.useState([])
+  // const [medicineList, setMedicineList] = React.useState([])
   const [formValues, setFormValues] = React.useState({
     name: '',
     oldejHome: '',
@@ -38,7 +38,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   })
   React.useEffect(() => {
     getOldejHomeList()
-  },[])
+  }, [])
 
   React.useEffect(() => {
     setFormValues({
@@ -52,27 +52,37 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const bodyContent = JSON.stringify(formValues)
-    console.log(bodyContent)
+    try {
+      console.log(formValues)
+      const bodyContent = JSON.stringify(formValues)
 
-    // const headersList = {
-    //   Accept: '*/*',
-    //   'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-    //   'Content-Type': 'application/json',
-    // }
+      const headersList = {
+        Accept: '*/*',
+        'Content-Type': 'application/json',
+      }
 
-    // const response = await fetch('/api/medicine', {
-    //   method: formValues._id === '' ? 'POST' : 'PUT',
-    //   body: bodyContent,
-    //   headers: headersList,
-    // })
+      const response = await fetch('/api/oldej', {
+        method: formValues._id === '' ? 'POST' : 'PUT',
+        body: bodyContent,
+        headers: headersList,
+      })
 
-    // const responseData = await response.json()
-    // if (responseData.success) {
-    //   console.log(responseData)
-    //   setFormValues({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
-    //   setOpen(false)
-    // }
+      const responseData = await response.json()
+      if (responseData.success) {
+        console.log(responseData)
+        setFormValues({
+          name: '',
+          oldejHome: '',
+          isActive: true,
+          medicines: [],
+          notes: '',
+          _id: '',
+        })
+        setOpen(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -84,7 +94,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
     }))
   }
 
-  const getOldejHomeList= async () => {
+  const getOldejHomeList = async () => {
     const rawoldejHomeResponse = await fetch('/api/oldejHome')
 
     const oldejHomeResponse = await rawoldejHomeResponse.json()
@@ -93,9 +103,17 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
     }
   }
 
+  const handleMedicineSave = (medicineList) => {
+    // Do something with the medicineList received from AddUsersMedicine
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      medicines: medicineList,
+    }))
+  }
+
   return (
     <React.Fragment>
-      <Dialog open={open} fullWidth maxWidth="md" >
+      <Dialog open={open} fullWidth maxWidth="md">
         <DialogTitle>{menu._id === '' ? 'Add' : 'Update'} User</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
@@ -119,11 +137,25 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    // options={oldejHomeList}
                     options={oldejHomeList.map((option) => option.OldejHome)}
                     sx={{ width: '100%' }}
+                    value={formValues.oldejHome} // Assign value prop
+                    onChange={(event, value) => {
+                      setFormValues((prevValues) => ({
+                        ...prevValues,
+                        oldejHome: value || '', // Update oldejHome value
+                      }))
+                    }}
                     renderInput={(params) => (
-                      <TextField required fullWidth name='oldejHome' variant="standard" margin="dense" {...params} label="Oldej Home" />
+                      <TextField
+                        required
+                        fullWidth
+                        name="oldejHome"
+                        variant="standard"
+                        margin="dense"
+                        {...params}
+                        label="Oldej Home"
+                      />
                     )}
                   />
                 </Grid>
@@ -134,7 +166,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <AddUsersMedicine />
+                  <AddUsersMedicine onMedicineSave={handleMedicineSave} editMedicinesList={formValues.medicines} />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -166,7 +198,14 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
           <DialogActions>
             <Button
               onClick={() => {
-                setFormValues({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
+                setFormValues({
+                  name: menu.name || '',
+                  oldejHome: menu.oldejHome || '',
+                  isActive: menu.isActive || true,
+                  medicines: menu.medicines || [],
+                  notes: menu.notes || '',
+                  _id: menu._id || '',
+                })
                 setOpen(false)
               }}
             >

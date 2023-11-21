@@ -57,7 +57,7 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     const createdUsers = await Users.create({
-      grNumber: (await Users.findOne().sort({ _id: -1 })).grNumber + 1,
+      grNumber: (await Users.findOne().sort({ _id: -1 }))?.grNumber + 1 || 1,
       name: req.body.name,
       oldejHome: req.body.oldejHome,
       isActive: req.body.isActive,
