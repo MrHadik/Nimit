@@ -1,12 +1,13 @@
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles'
 import React from 'react'
 
 export const Logo = () => {
-  const theme = useTheme();
-  const fillColor = theme.palette.primary.main;
+  const theme = useTheme()
+  const fillColor = theme.palette.primary.main
 
   return (
-    <svg
+    <>
+      <svg
       fill="none"
       height="100%"
       viewBox="0 0 24 24"
@@ -23,5 +24,6 @@ export const Logo = () => {
         fill={fillColor}
       />
     </svg>
-  );
-};
+    </>
+  )
+}
