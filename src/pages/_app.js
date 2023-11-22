@@ -11,12 +11,7 @@ import { useNProgress } from 'src/hooks/use-nprogress'
 import { createTheme } from 'src/theme'
 import { createEmotionCache } from 'src/utils/create-emotion-cache'
 import 'simplebar-react/dist/simplebar.min.css'
-import { LicenseInfo } from '@mui/x-license-pro'
 import { SnackbarProvider } from 'notistack'
-
-LicenseInfo.setLicenseKey(
-  '90a02713efeb5fb14bf15061394c966eTz00Mzg4MixFPTE2ODQzNjI5MzIwNTksUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI',
-)
 
 const clientSideEmotionCache = createEmotionCache()
 

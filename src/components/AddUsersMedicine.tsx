@@ -27,15 +27,19 @@ export default function MedicineList({
   onMedicineSave: (any) => void
   editMedicinesList: Array<Medicine>
 }) {
-  const [medicineList, setMedicineList] = useState(editMedicinesList || [])
+  const [medicineList, setMedicineList] = useState(editMedicinesList)
   const [medicineName, setMedicineName] = useState('')
   const [quantity, setQuantity] = useState('')
   const [isStar, setIsStar] = useState(false)
-  const [Medicine, setMedicine] = useState([])
+  const [Medicine, setMedicine] = useState([])    /// list of Medicine like UDP-AT, ...
 
   useEffect(() => {
     GetMedicine()
   }, [])
+
+  useEffect(() => {
+    setMedicineList(editMedicinesList); // Update medicineList when editMedicinesList prop changes
+  }, [editMedicinesList]);
 
   const handleAddMedicine = () => {
     if (medicineName.trim() !== '' && quantity.trim() !== '') {
@@ -120,7 +124,12 @@ export default function MedicineList({
             options={Medicine.map((option) => option.medicineName)}
             sx={{ width: '100%' }}
             value={medicineName}
-            onChange={(event, value) => setMedicineName(value)} // Set the selected value
+            onChange={(event, value) => {
+              setMedicineName(value)
+              Medicine.map((med) => {
+                med.medicineName === value ? setIsStar(med.isStar) : ''
+              })
+            }}
             renderInput={(params) => (
               <TextField margin="dense" {...params} fullWidth variant="standard" label="Medicine Name" />
             )}
@@ -152,7 +161,6 @@ export default function MedicineList({
               }
               label="Star"
             />
-
             <Button
               variant="contained"
               startIcon={

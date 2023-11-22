@@ -67,7 +67,7 @@ const Page = () => {
       headerName: 'is Star',
       width: 150,
       renderCell: (params) => (
-        <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon />} checked={params.value} disabled />
+        <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon color="error" />} checked={params.value} disabled />
       ),
     },
     {
@@ -170,7 +170,7 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <Box sx={{ height:450, width: '100%' }}>
+            <Box sx={{ height: 450, width: '100%' }}>
               <Paper elevation={3}>
                 <DataGrid
                   rows={data}
