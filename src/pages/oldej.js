@@ -7,7 +7,10 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
 import AddUsers from '@/components/AddUsers'
-// import Chip from '@mui/material/Chip';
+import CheckIcon from '@mui/icons-material/Check'
+import Chip from '@mui/material/Chip'
+import CloseIcon from '@mui/icons-material/Close'
+import Paper from '@mui/material/Paper'
 
 const Page = () => {
   const [data, setData] = useState([])
@@ -42,7 +45,8 @@ const Page = () => {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    // { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'grNumber', headerName: 'GR Number', width: 130 },
     {
       field: 'name',
       headerName: 'Name',
@@ -57,6 +61,12 @@ const Page = () => {
       field: 'isActive',
       headerName: 'Active',
       width: 150,
+      renderCell: (params) =>
+        params.value ? (
+          <Chip color="success" variant="outlined" size="small" label="Active" icon={<CheckIcon/>} />
+        ) : (
+          <Chip color="error" variant="outlined" size="small" label="Not Active" icon={<CloseIcon />} />
+        ),
     },
     {
       field: 'notes',
@@ -125,6 +135,7 @@ const Page = () => {
       <Box
         component="main"
         sx={{
+          backgroundColor: '#EFEFEF',
           flexGrow: 1,
           py: 8,
         }}
@@ -153,6 +164,7 @@ const Page = () => {
               </div>
             </Stack>
             <Box sx={{ height: 450, width: '100%' }}>
+            <Paper elevation={3}>
               <DataGrid
                 rows={data}
                 columns={columns}
@@ -164,12 +176,21 @@ const Page = () => {
                     },
                   },
                 }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+                autoHeight
                 slots={{ toolbar: GridToolbar }}
+                disableColumnFilter
+                disableColumnSelector
+                disableDensitySelector
                 pageSizeOptions={[5, 10, 50, 100]}
                 disableRowSelectionOnClick
                 editMode="false"
-
               />
+            </Paper>
             </Box>
           </Stack>
         </Container>

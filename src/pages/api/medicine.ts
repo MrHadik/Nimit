@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import connectMongoDB from "@/lib/mongodb";
 import Medicine from "@/models/Medicine";
+import Users from "@/models/Users";
 
 connectMongoDB();
 
@@ -37,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (req.query._id) {
+
       const id = Array.isArray(req.query._id) ? req.query._id[0] : req.query._id;
       const oneMedicine = await Medicine.findById(id as string);
       if (oneMedicine == null) {
@@ -44,7 +46,28 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
         return;
       }
       res.status(200).json({ oneMedicine, success: true });
+
+    } else if (req.query.status) {
+
+      const tabletQuantities = {}
+      const rawMedicines = await Users.find({ isActive: true });
+      rawMedicines.forEach((user) => {
+        user.medicines.forEach((medicine) => {
+          const { medicineName, quantity } = medicine
+          tabletQuantities[medicineName] = (tabletQuantities[medicineName] || 0) + parseInt(quantity, 10)
+        })
+      })
+
+      const formattedQuantities = Object.keys(tabletQuantities).map((medicineName, index) => ({
+        id: index + 1,
+        medicineName,
+        quantity: tabletQuantities[medicineName],
+        isStar: false,
+      }))
+      res.status(200).json({ Medicines: formattedQuantities, success: true });
+
     } else {
+
       const allMedicines = await Medicine.find();
       res.status(200).json({ Medicines: allMedicines, success: true });
     }

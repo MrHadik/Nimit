@@ -6,32 +6,25 @@ import { DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
-import AddMedicine from '@/components/AddMedicine'
-import Checkbox from '@mui/material/Checkbox'
-import StarBorderIcon from '@mui/icons-material/StarBorder'
-import StarIcon from '@mui/icons-material/Star'
+import AddOldejHome from '@/components/AddOldejHome'
 import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
-  const [menu, setMenu] = React.useState({ medicineName: '', isStar: '', inStock: 0, notes: '', _id: '' })
+  const [menu, setMenu] = React.useState({ OldejHome: '', notes: '', _id: '' })
   useEffect(() => {
     GetData()
   }, [open])
 
   const GetData = async () => {
     setLoading(true)
-    let headersList = {
-      Accept: '*/*',
-    }
 
     try {
-      let response = await fetch('/api/medicine', {
-        method: 'GET',
-        headers: headersList,
-      })
+      let response = await fetch('/api/oldejHome')
 
       if (!response.ok) {
         throw new Error('Failed to fetch data')
@@ -39,7 +32,7 @@ const Page = () => {
 
       let responseData = await response.json()
       if (responseData.success) {
-        const dataWithIds = responseData.Medicines.map((row, index) => ({
+        const dataWithIds = responseData.allOldejHome.map((row, index) => ({
           ...row,
           // isStar: row.isStar ? <Chip label="success" color="success" /> : <Chip label="primary" color="primary" />,
           id: index + 1,
@@ -57,29 +50,15 @@ const Page = () => {
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
-      field: 'medicineName',
-      headerName: 'Medicine Name',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'isStar',
-      headerName: 'is Star',
-      width: 150,
-      renderCell: (params) => (
-        <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon color="error" />} checked={params.value} disabled />
-      ),
-    },
-    {
-      field: 'inStock',
-      headerName: 'in Stock',
-      width: 150,
+      field: 'OldejHome',
+      headerName: 'Oldej Home',
+      width: 300,
       editable: true,
     },
     {
       field: 'notes',
       headerName: 'Notes',
-      width: 150,
+      width: 250,
       editable: true,
     },
     {
@@ -88,22 +67,22 @@ const Page = () => {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-      getActions: (medicine) => {
+      getActions: (Home) => {
         return [
           <GridActionsCellItem
-            key={`edit-${medicine.id}`}
+            key={`edit-${Home.id}`}
             icon={<EditIcon />}
             label="Edit"
-            onClick={() => handleEditClick(medicine.row)}
+            onClick={() => handleEditClick(Home.row)}
             sx={{
               color: 'primary.main',
             }}
           />,
           <GridActionsCellItem
-            key={`delete-${medicine.id}`}
+            key={`delete-${Home.id}`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => handleDeleteClick(medicine.row)}
+            onClick={() => handleDeleteClick(Home.row)}
             sx={{
               color: 'error.main',
             }}
@@ -113,23 +92,21 @@ const Page = () => {
     },
   ]
 
-  const handleEditClick = (id) => {
-    setMenu(id)
+  const handleEditClick = (row) => {
+    setMenu(row)
     setOpen(true)
   }
   const handleDeleteClick = async (row) => {
-    if (confirm('are you sure to delete ' + row.medicineName + ' ?')) {
-      let headersList = {
-        Accept: '*/*',
-      }
-
-      let response = await fetch('/api/medicine?_id=' + row._id, {
+    if (confirm('are you sure to delete ' + row.OldejHome + ' ?')) {
+      let response = await fetch('/api/oldejHome?_id=' + row._id, {
         method: 'DELETE',
-        headers: headersList,
       })
 
-      let data = await response.text()
-      console.log(data)
+      const data = await response.json()
+      data.success
+        ? enqueueSnackbar('Record Deleted successfully', { variant: 'success' })
+        : enqueueSnackbar(data, { variant: 'error' })
+
       GetData()
     }
   }
@@ -137,13 +114,13 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Medicine</title>
+        <title>Oldej Home</title>
       </Head>
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
           backgroundColor: '#EFEFEF',
+          flexGrow: 1,
           py: 8,
         }}
       >
@@ -151,7 +128,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Medicine</Typography>
+                <Typography variant="h4">Oldej Home</Typography>
               </Stack>
               <div>
                 <Button
@@ -161,7 +138,7 @@ const Page = () => {
                     </SvgIcon>
                   }
                   onClick={() => {
-                    setMenu({ medicineName: '', isStar: '', inStock: 0, notes: '', _id: '' })
+                    setMenu({ OldejHome: '', notes: '', _id: '' })
                     setOpen(true)
                   }}
                   variant="contained"
@@ -179,7 +156,7 @@ const Page = () => {
                   initialState={{
                     pagination: {
                       paginationModel: {
-                        pageSize: 5,
+                        pageSize: 10,
                       },
                     },
                   }}
@@ -194,7 +171,7 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
-      <AddMedicine open={open} setOpen={setOpen} menu={menu} />
+      <AddOldejHome open={open} setOpen={setOpen} menu={menu} />
     </>
   )
 }

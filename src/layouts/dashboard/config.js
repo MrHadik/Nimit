@@ -1,10 +1,10 @@
-import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
-import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
-import { SvgIcon } from '@mui/material';
-import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon'
+import UsersIcon from '@heroicons/react/24/solid/UsersIcon'
+import { SvgIcon } from '@mui/material'
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop'
 import React from 'react'
-import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
+import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth'
+import BusinessIcon from '@mui/icons-material/Business'
 
 export const items = [
   {
@@ -14,7 +14,25 @@ export const items = [
       <SvgIcon fontSize="small">
         <ChartBarIcon />
       </SvgIcon>
-    )
+    ),
+  },
+  {
+    title: 'Oldej Home',
+    path: '/oldejHome',
+    icon: (
+      <SvgIcon fontSize="small">
+        <BusinessIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: 'Medicine',
+    path: '/medicine',
+    icon: (
+      <SvgIcon fontSize="small">
+        <CalendarViewMonthIcon />
+      </SvgIcon>
+    ),
   },
   {
     title: 'Oldej',
@@ -23,17 +41,9 @@ export const items = [
       <SvgIcon fontSize="small">
         <UsersIcon />
       </SvgIcon>
-    )
+    ),
   },
-  {
-    title: 'Medicine',
-    path: '/medicine',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CalendarViewMonthIcon/>
-      </SvgIcon>
-    )
-  },
+
   {
     title: 'Print',
     path: '/print',
@@ -41,16 +51,7 @@ export const items = [
       <SvgIcon fontSize="small">
         <LocalPrintshopIcon />
       </SvgIcon>
-    )
-  },
-  {
-    title: 'Companies',
-    path: '/companies',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
-      </SvgIcon>
-    )
+    ),
   },
 
   // {
@@ -80,4 +81,4 @@ export const items = [
   //     </SvgIcon>
   //   )
   // }
-];
+]

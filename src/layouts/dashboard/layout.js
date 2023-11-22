@@ -3,8 +3,9 @@ import { usePathname } from 'next/navigation'
 import { styled } from '@mui/material/styles'
 import { withAuthGuard } from 'src/hocs/with-auth-guard'
 import { SideNav } from './side-nav'
-// import { TopNav } from './top-nav'
+import { TopNav } from './top-nav'
 import React from 'react'
+import { alpha } from '@mui/material/styles';
 
 const SIDE_NAV_WIDTH = 280
 
@@ -20,6 +21,7 @@ const LayoutRoot = styled('div')(({ theme }) => ({
 const LayoutContainer = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
+  backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
   flexDirection: 'column',
   width: '100%',
 })
@@ -41,7 +43,7 @@ export const Layout = withAuthGuard((props) => {
 
   return (
     <>
-      {/* <TopNav onNavOpen={() => setOpenNav(true)} /> */}
+      <TopNav onNavOpen={() => setOpenNav(true)} />
       <SideNav onClose={() => setOpenNav(false)} open={openNav} />
       <LayoutRoot>
         <LayoutContainer>{children}</LayoutContainer>

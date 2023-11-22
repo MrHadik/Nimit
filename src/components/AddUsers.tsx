@@ -12,6 +12,13 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Grid from '@mui/material/Grid'
 import AddUsersMedicine from './AddUsersMedicine'
 
+interface Medicine {
+  id: number
+  medicineName: string
+  quantity: string
+  isStar: boolean
+}
+
 interface Props {
   open: boolean
   setOpen: (boolean) => void
@@ -19,7 +26,7 @@ interface Props {
     name: string
     isActive: boolean
     oldejHome: string
-    medicines: Array<object>
+    medicines: Array<Medicine>
     notes: string
     _id: string
   }
@@ -29,12 +36,12 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   const [oldejHomeList, setOldejHomeList] = React.useState([])
   // const [medicineList, setMedicineList] = React.useState([])
   const [formValues, setFormValues] = React.useState({
-    name: '',
-    oldejHome: '',
-    isActive: true,
-    medicines: [],
-    notes: '',
-    _id: '',
+    name: menu.name,
+    oldejHome: menu.oldejHome,
+    isActive: menu.isActive,
+    medicines: menu.medicines,
+    notes: menu.notes,
+    _id: menu._id,
   })
   React.useEffect(() => {
     getOldejHomeList()
@@ -44,8 +51,8 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
     setFormValues({
       name: menu.name || '',
       oldejHome: menu.oldejHome || '',
-      isActive: menu.isActive || true,
-      medicines: menu.medicines || [],
+      isActive: menu.isActive,
+      medicines: menu.medicines,
       notes: menu.notes || '',
       _id: menu._id || '',
     })

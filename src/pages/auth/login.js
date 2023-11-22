@@ -1,18 +1,18 @@
-import { useCallback, useState } from 'react';
+// import { useCallback, useState } from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
+// import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
-  Alert,
+  // Alert,
   Box,
   Button,
-  FormHelperText,
-  Link,
+  // FormHelperText,
+  // Link,
   Stack,
-  Tab,
-  Tabs,
+  // Tab,
+  // Tabs,
   TextField,
   Typography
 } from '@mui/material';
@@ -23,11 +23,13 @@ import React from 'react'
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
+  // const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
+      // email: 'demo@devias.io',
+      // password: 'Password123!',
+      email: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
@@ -53,26 +55,26 @@ const Page = () => {
     }
   });
 
-  const handleMethodChange = useCallback(
-    (event, value) => {
-      setMethod(value);
-    },
-    []
-  );
+  // const handleMethodChange = useCallback(
+  //   (event, value) => {
+  //     setMethod(value);
+  //   },
+  //   []
+  // );
 
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
-  );
+  // const handleSkip = useCallback(
+  //   () => {
+  //     auth.skip();
+  //     router.push('/');
+  //   },
+  //   [auth, router]
+  // );
 
   return (
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Login
         </title>
       </Head>
       <Box
@@ -100,7 +102,7 @@ const Page = () => {
               <Typography variant="h4">
                 Login
               </Typography>
-              <Typography
+              {/* <Typography
                 color="text.secondary"
                 variant="body2"
               >
@@ -114,9 +116,9 @@ const Page = () => {
                 >
                   Register
                 </Link>
-              </Typography>
+              </Typography> */}
             </Stack>
-            <Tabs
+            {/* <Tabs
               onChange={handleMethodChange}
               sx={{ mb: 3 }}
               value={method}
@@ -130,7 +132,7 @@ const Page = () => {
                 value="phoneNumber"
               />
             </Tabs>
-            {method === 'email' && (
+            {method === 'email' && ( */}
               <form
                 noValidate
                 onSubmit={formik.handleSubmit}
@@ -159,9 +161,9 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
+                {/* <FormHelperText sx={{ mt: 1 }}>
                   Optionally you can skip.
-                </FormHelperText>
+                </FormHelperText> */}
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -180,7 +182,7 @@ const Page = () => {
                 >
                   Continue
                 </Button>
-                <Button
+                {/* <Button
                   fullWidth
                   size="large"
                   sx={{ mt: 3 }}
@@ -196,10 +198,10 @@ const Page = () => {
                   <div>
                     You can use <b>demo@devias.io</b> and password <b>Password123!</b>
                   </div>
-                </Alert>
+                </Alert> */}
               </form>
-            )}
-            {method === 'phoneNumber' && (
+            {/* )} */}
+            {/* {method === 'phoneNumber' && (
               <div>
                 <Typography
                   sx={{ mb: 1 }}
@@ -211,7 +213,7 @@ const Page = () => {
                   To prevent unnecessary costs we disabled this feature in the demo.
                 </Typography>
               </div>
-            )}
+            )} */}
           </div>
         </Box>
       </Box>
