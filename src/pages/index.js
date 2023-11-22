@@ -90,6 +90,7 @@ const Page = () => {
               <Paper elevation={3}>
                 <DataGrid
                   rows={data}
+                  autoHeight
                   columns={columns}
                   loading={loading}
                   initialState={{

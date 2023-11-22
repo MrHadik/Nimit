@@ -183,6 +183,7 @@ const Page = () => {
                       },
                     },
                   }}
+                  autoHeight
                   slots={{ toolbar: GridToolbar }}
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick

@@ -178,6 +178,7 @@ export default function MedicineList({
       <div style={{ width: '100%' }}>
         <DataGrid
           rowHeight={25}
+          autoHeight
           rows={medicineList}
           columns={columns}
           pageSizeOptions={[100]}

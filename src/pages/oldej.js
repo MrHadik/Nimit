@@ -181,6 +181,7 @@ const Page = () => {
                     showQuickFilter: true,
                   },
                 }}
+                autoHeight
                 slots={{ toolbar: GridToolbar }}
                 disableColumnFilter
                 disableColumnSelector
