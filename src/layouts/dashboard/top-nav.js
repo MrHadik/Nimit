@@ -17,6 +17,7 @@ import {
 import { usePopover } from 'src/hooks/use-popover'
 import { AccountPopover } from './account-popover'
 import React from 'react'
+import { deepPurple } from '@mui/material/colors';
 
 const SIDE_NAV_WIDTH = 280
 const TOP_NAV_HEIGHT = 64
@@ -99,9 +100,10 @@ export const TopNav = (props) => {
                 cursor: 'pointer',
                 height: 40,
                 width: 40,
+                bgcolor: deepPurple[500]
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
-            />
+              // src="/assets/avatars/avatar-anika-visser.png"
+            >N</Avatar>
           </Stack>
         </Stack>
       </Box>
