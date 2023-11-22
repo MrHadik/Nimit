@@ -5,8 +5,11 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 function Print() {
+  const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = useState([])
   const [oldejHomeName, setOldejHomeName] = useState('')
   const [loading, setLoading] = useState(false)
@@ -42,8 +45,8 @@ function Print() {
       let response = await fetch('/api/pdf?oldejHome=' + oldejHomeName)
       let responseData = await response.json()
 
-      if (responseData.success) {
-        console.log(responseData)
+      if (!responseData.success) {
+        enqueueSnackbar('Something Wrong', { variant: 'error' })
       }
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -59,7 +62,7 @@ function Print() {
       </Head>
       <Box
         sx={{
-          backgroundColor: 'background.paper',
+          backgroundColor: '#EFEFEF',
           flex: '1 1 auto',
           display: 'flex',
           justifyContent: 'center',
@@ -67,6 +70,7 @@ function Print() {
         }}
       >
         <Container maxWidth="sm">
+        <Paper elevation={3} sx={{padding: 5}}>
           <Stack spacing={3}>
             <Autocomplete
               fullWidth
@@ -81,6 +85,7 @@ function Print() {
               {loading ? <CircularProgress size={24} /> : 'Download PDF'}
             </Button>
           </Stack>
+        </Paper>
         </Container>
       </Box>
     </>

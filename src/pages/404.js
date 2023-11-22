@@ -17,6 +17,7 @@ const Page = () => (
         alignItems: 'center',
         display: 'flex',
         flexGrow: 1,
+        backgroundColor: '#EFEFEF',
         minHeight: '100%'
       }}
     >

@@ -12,6 +12,7 @@ import { createTheme } from 'src/theme'
 import { createEmotionCache } from 'src/utils/create-emotion-cache'
 import 'simplebar-react/dist/simplebar.min.css'
 import { LicenseInfo } from '@mui/x-license-pro'
+import { SnackbarProvider } from 'notistack'
 
 LicenseInfo.setLicenseKey(
   '90a02713efeb5fb14bf15061394c966eTz00Mzg4MixFPTE2ODQzNjI5MzIwNTksUz1wcm8sTE09c3Vic2NyaXB0aW9uLEtWPTI',
@@ -31,22 +32,24 @@ const App = (props) => {
   const theme = createTheme()
 
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Nimit</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AuthConsumer>
-              {(auth) => (auth.isLoading ? <SplashScreen /> : getLayout(<Component {...pageProps} />))}
-            </AuthConsumer>
-          </ThemeProvider>
-        </AuthProvider>
-      </LocalizationProvider>
-    </CacheProvider>
+    <SnackbarProvider maxSnack={3} autoHideDuration={1000}>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <title>Nimit</title>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <AuthProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <AuthConsumer>
+                {(auth) => (auth.isLoading ? <SplashScreen /> : getLayout(<Component {...pageProps} />))}
+              </AuthConsumer>
+            </ThemeProvider>
+          </AuthProvider>
+        </LocalizationProvider>
+      </CacheProvider>
+    </SnackbarProvider>
   )
 }
 

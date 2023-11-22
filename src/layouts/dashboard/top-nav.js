@@ -13,7 +13,7 @@ import {
   Tooltip,
   useMediaQuery
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+// import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import React from 'react'
@@ -32,7 +32,8 @@ export const TopNav = (props) => {
         component="header"
         sx={{
           backdropFilter: 'blur(6px)',
-          backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
+          // backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
+          backgroundColor: "#EFEFEF",
           position: 'sticky',
           left: {
             lg: `${SIDE_NAV_WIDTH}px`

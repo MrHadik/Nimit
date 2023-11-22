@@ -6,17 +6,16 @@ import { DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import React, { useEffect, useState } from 'react'
-import AddUsers from '@/components/AddUsers'
-import CheckIcon from '@mui/icons-material/Check'
-import Chip from '@mui/material/Chip'
-import CloseIcon from '@mui/icons-material/Close'
+import AddOldejHome from '@/components/AddOldejHome'
 import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
-  const [menu, setMenu] = React.useState({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
+  const [menu, setMenu] = React.useState({ OldejHome: '', notes: '', _id: '' })
   useEffect(() => {
     GetData()
   }, [open])
@@ -25,11 +24,15 @@ const Page = () => {
     setLoading(true)
 
     try {
-      let response = await fetch('/api/oldej')
+      let response = await fetch('/api/oldejHome')
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data')
+      }
 
       let responseData = await response.json()
       if (responseData.success) {
-        const dataWithIds = responseData.allUser.map((row, index) => ({
+        const dataWithIds = responseData.allOldejHome.map((row, index) => ({
           ...row,
           // isStar: row.isStar ? <Chip label="success" color="success" /> : <Chip label="primary" color="primary" />,
           id: index + 1,
@@ -45,33 +48,18 @@ const Page = () => {
   }
 
   const columns = [
-    // { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'grNumber', headerName: 'GR Number', width: 130 },
+    { field: 'id', headerName: 'ID', width: 90 },
     {
-      field: 'name',
-      headerName: 'Name',
-      width: 150,
-    },
-    {
-      field: 'oldejHome',
-      headerName: 'oldej Home',
-      width: 150,
-    },
-    {
-      field: 'isActive',
-      headerName: 'Active',
-      width: 150,
-      renderCell: (params) =>
-        params.value ? (
-          <Chip color="success" variant="outlined" size="small" label="Active" icon={<CheckIcon/>} />
-        ) : (
-          <Chip color="error" variant="outlined" size="small" label="Not Active" icon={<CloseIcon />} />
-        ),
+      field: 'OldejHome',
+      headerName: 'Oldej Home',
+      width: 300,
+      editable: true,
     },
     {
       field: 'notes',
       headerName: 'Notes',
-      width: 150,
+      width: 250,
+      editable: true,
     },
     {
       field: 'actions',
@@ -79,22 +67,22 @@ const Page = () => {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-      getActions: (Users) => {
+      getActions: (Home) => {
         return [
           <GridActionsCellItem
-            key={`edit-${Users.id}`}
+            key={`edit-${Home.id}`}
             icon={<EditIcon />}
             label="Edit"
-            onClick={() => handleEditClick(Users.row)}
+            onClick={() => handleEditClick(Home.row)}
             sx={{
               color: 'primary.main',
             }}
           />,
           <GridActionsCellItem
-            key={`delete-${Users.id}`}
+            key={`delete-${Home.id}`}
             icon={<DeleteIcon />}
             label="Delete"
-            onClick={() => handleDeleteClick(Users.row)}
+            onClick={() => handleDeleteClick(Home.row)}
             sx={{
               color: 'error.main',
             }}
@@ -109,28 +97,24 @@ const Page = () => {
     setOpen(true)
   }
   const handleDeleteClick = async (row) => {
-    try {
-      if (confirm('are you sure to delete ' + row.name + ' ?')) {
-        let response = await fetch('/api/oldej?_id=' + row._id, {
-          method: 'DELETE',
-        })
+    if (confirm('are you sure to delete ' + row.OldejHome + ' ?')) {
+      let response = await fetch('/api/oldejHome?_id=' + row._id, {
+        method: 'DELETE',
+      })
 
-        let responseData = await response.json()
-        if (responseData.success) {
-          GetData()
-        }
-        console.log(data)
-      }
-    } catch (error) {
-      alert(error)
-      console.error('Error fetching data:', error)
+      const data = await response.json()
+      data.success
+        ? enqueueSnackbar('Record Deleted successfully', { variant: 'success' })
+        : enqueueSnackbar(data, { variant: 'error' })
+
+      GetData()
     }
   }
 
   return (
     <>
       <Head>
-        <title>Users</title>
+        <title>Oldej Home</title>
       </Head>
       <Box
         component="main"
@@ -144,7 +128,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Users</Typography>
+                <Typography variant="h4">Oldej Home</Typography>
               </Stack>
               <div>
                 <Button
@@ -154,47 +138,39 @@ const Page = () => {
                     </SvgIcon>
                   }
                   onClick={() => {
-                    setMenu({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
+                    setMenu({ OldejHome: '', notes: '', _id: '' })
                     setOpen(true)
                   }}
                   variant="contained"
                 >
-                  Add User
+                  Add
                 </Button>
               </div>
             </Stack>
             <Box sx={{ height: 450, width: '100%' }}>
-            <Paper elevation={3}>
-              <DataGrid
-                rows={data}
-                columns={columns}
-                loading={loading}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
+              <Paper elevation={3}>
+                <DataGrid
+                  rows={data}
+                  columns={columns}
+                  loading={loading}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
                     },
-                  },
-                }}
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                  },
-                }}
-                slots={{ toolbar: GridToolbar }}
-                disableColumnFilter
-                disableColumnSelector
-                disableDensitySelector
-                pageSizeOptions={[5, 10, 50, 100]}
-                disableRowSelectionOnClick
-                editMode="false"
-              />
-            </Paper>
+                  }}
+                  slots={{ toolbar: GridToolbar }}
+                  pageSizeOptions={[5, 10, 50, 100]}
+                  disableRowSelectionOnClick
+                  editMode="false"
+                />
+              </Paper>
             </Box>
           </Stack>
         </Container>
       </Box>
-      <AddUsers open={open} setOpen={setOpen} menu={menu} />
+      <AddOldejHome open={open} setOpen={setOpen} menu={menu} />
     </>
   )
 }

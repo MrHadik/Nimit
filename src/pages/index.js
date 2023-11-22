@@ -22,6 +22,7 @@ const Page = () => (
     <Box
       component="main"
       sx={{
+        backgroundColor: '#EFEFEF',
         flexGrow: 1,
         py: 8,
       }}

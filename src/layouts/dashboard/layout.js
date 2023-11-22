@@ -5,6 +5,7 @@ import { withAuthGuard } from 'src/hocs/with-auth-guard'
 import { SideNav } from './side-nav'
 import { TopNav } from './top-nav'
 import React from 'react'
+import { alpha } from '@mui/material/styles';
 
 const SIDE_NAV_WIDTH = 280
 
@@ -20,6 +21,7 @@ const LayoutRoot = styled('div')(({ theme }) => ({
 const LayoutContainer = styled('div')({
   display: 'flex',
   flex: '1 1 auto',
+  backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8),
   flexDirection: 'column',
   width: '100%',
 })

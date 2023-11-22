@@ -10,6 +10,7 @@ import AddMedicine from '@/components/AddMedicine'
 import Checkbox from '@mui/material/Checkbox'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
+import Paper from '@mui/material/Paper'
 
 const Page = () => {
   const [data, setData] = useState([])
@@ -142,6 +143,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
+          backgroundColor: '#EFEFEF',
           py: 8,
         }}
       >
@@ -168,23 +170,25 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <Box sx={{ height: 540, width: '100%' }}>
-              <DataGrid
-                rows={data}
-                columns={columns}
-                loading={loading}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 10,
+            <Box sx={{ height:450, width: '100%' }}>
+              <Paper elevation={3}>
+                <DataGrid
+                  rows={data}
+                  columns={columns}
+                  loading={loading}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
                     },
-                  },
-                }}
-                slots={{ toolbar: GridToolbar }}
-                pageSizeOptions={[5, 10, 50, 100]}
-                disableRowSelectionOnClick
-                editMode="false"
-              />
+                  }}
+                  slots={{ toolbar: GridToolbar }}
+                  pageSizeOptions={[5, 10, 50, 100]}
+                  disableRowSelectionOnClick
+                  editMode="false"
+                />
+              </Paper>
             </Box>
           </Stack>
         </Container>
