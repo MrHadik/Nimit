@@ -6,10 +6,8 @@ import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
-import { useSnackbar } from 'notistack'
 
 function Print() {
-  const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = useState([])
   const [oldejHomeName, setOldejHomeName] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,6 +18,10 @@ function Print() {
 
   const handleInputChange = (event, value) => {
     setOldejHomeName(value)
+  }
+
+  const handleDownload = () => {
+    window.open('/api/pdf?oldejHome=' + oldejHomeName, '_blank')
   }
 
   const getList = async () => {
@@ -33,22 +35,6 @@ function Print() {
       }
     } catch (error) {
       alert(error)
-      console.error('Error fetching data:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const downloadPdf = async () => {
-    try {
-      setLoading(true)
-      let response = await fetch('/api/pdf?oldejHome=' + oldejHomeName)
-      let responseData = await response.json()
-
-      if (!responseData.success) {
-        enqueueSnackbar('Something Wrong', { variant: 'error' })
-      }
-    } catch (error) {
       console.error('Error fetching data:', error)
     } finally {
       setLoading(false)
@@ -70,22 +56,22 @@ function Print() {
         }}
       >
         <Container maxWidth="sm">
-        <Paper elevation={3} sx={{padding: 5}}>
-          <Stack spacing={3}>
-            <Autocomplete
-              fullWidth
-              disablePortal
-              id="combo-box-demo"
-              options={oldejHomeList.map((obj) => obj.OldejHome)}
-              value={oldejHomeName}
-              onChange={handleInputChange}
-              renderInput={(params) => <TextField {...params} label="Oldej Home" />}
-            />
-            <Button fullWidth onClick={downloadPdf} size="large" disabled={loading} variant="contained">
-              {loading ? <CircularProgress size={24} /> : 'Download PDF'}
-            </Button>
-          </Stack>
-        </Paper>
+          <Paper elevation={3} sx={{ padding: 5 }}>
+            <Stack spacing={3}>
+              <Autocomplete
+                fullWidth
+                disablePortal
+                id="combo-box-demo"
+                options={oldejHomeList.map((obj) => obj.OldejHome)}
+                value={oldejHomeName}
+                onChange={handleInputChange}
+                renderInput={(params) => <TextField {...params} label="Oldej Home" />}
+              />
+              <Button onClick={handleDownload} fullWidth size="large" disabled={loading} variant="contained">
+                {loading ? <CircularProgress size={24} /> : 'Download PDF'}
+              </Button>
+            </Stack>
+          </Paper>
         </Container>
       </Box>
     </>
