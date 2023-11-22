@@ -187,6 +187,7 @@ const Page = () => {
                 disableColumnSelector
                 disableDensitySelector
                 pageSizeOptions={[5, 10, 50, 100]}
+                rowHeight={40}
                 disableRowSelectionOnClick
                 editMode="false"
               />
