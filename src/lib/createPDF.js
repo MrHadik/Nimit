@@ -13,10 +13,10 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
     theme: 'grid',
     columnStyles: {
       0: { cellWidth: 10 },
-      1: { cellWidth: 81 - 0.1103333334 },
-      2: { cellWidth: 61 - 0.1103333334 },
+      1: { cellWidth: 80 - 0.1103333334 },
+      2: { cellWidth: 60 - 0.1103333334 },
       3: { cellWidth: 10 },
-      4: { cellWidth: 20 },
+      4: { cellWidth: 22 },
     },
     didDrawPage: function (data) {
       startYPosition = data.table.finalY

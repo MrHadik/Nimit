@@ -31,15 +31,15 @@ export default function MedicineList({
   const [medicineName, setMedicineName] = useState('')
   const [quantity, setQuantity] = useState('')
   const [isStar, setIsStar] = useState(false)
-  const [Medicine, setMedicine] = useState([])    /// list of Medicine like UDP-AT, ...
+  const [Medicine, setMedicine] = useState([]) /// list of Medicine like UDP-AT, ...
 
   useEffect(() => {
     GetMedicine()
   }, [])
 
   useEffect(() => {
-    setMedicineList(editMedicinesList); // Update medicineList when editMedicinesList prop changes
-  }, [editMedicinesList]);
+    setMedicineList(editMedicinesList) // Update medicineList when editMedicinesList prop changes
+  }, [editMedicinesList])
 
   const handleAddMedicine = () => {
     if (medicineName.trim() !== '' && quantity.trim() !== '') {

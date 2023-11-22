@@ -52,7 +52,7 @@ function Print() {
           flex: '1 1 auto',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          // alignItems: 'center',
         }}
       >
         <Container maxWidth="sm">

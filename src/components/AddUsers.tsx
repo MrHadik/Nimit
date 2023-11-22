@@ -167,10 +167,12 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   />
                 </Grid>
                 <Grid item lg={4} md={4} sm={4} xl={4} xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox checked={formValues.isActive} onChange={handleInputChange} name="isActive" />}
-                    label="Active"
-                  />
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , paddingTop: 2}}>
+                    <FormControlLabel
+                      control={<Checkbox checked={formValues.isActive} onChange={handleInputChange} name="isActive" />}
+                      label="Active"
+                    />
+                  </Box>
                 </Grid>
                 <Grid item xs={12}>
                   <AddUsersMedicine onMedicineSave={handleMedicineSave} editMedicinesList={formValues.medicines} />

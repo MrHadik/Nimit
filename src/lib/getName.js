@@ -4,7 +4,7 @@ function getName(params) {
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
-    return params +' ~ '+ monthNames[d.getMonth()];
+    return params +' ~ '+ monthNames[d.getMonth()] + ' '+ d.getFullYear();
 }
 
 export default getName
