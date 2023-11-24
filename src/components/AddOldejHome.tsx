@@ -35,30 +35,35 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // console.log(formValues)
-    const bodyContent = JSON.stringify(formValues)
 
-    const headersList = {
-      Accept: '*/*',
-      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json',
-    }
+    try {
+      const bodyContent = JSON.stringify(formValues)
+      const headersList = {
+        Accept: '*/*',
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+      }
 
-    const response = await fetch('/api/oldejHome', {
-      method: formValues._id === '' ? 'POST' : 'PUT',
-      body: bodyContent,
-      headers: headersList,
-    })
+      const response = await fetch('/api/oldejHome', {
+        method: formValues._id === '' ? 'POST' : 'PUT',
+        body: bodyContent,
+        headers: headersList,
+      })
 
-    const responseData = await response.json()
-    console.log(responseData)
-    if (responseData.success) {
-      formValues._id === ''
-        ? enqueueSnackbar('Record Added successfully', { variant: 'success' })
-        : enqueueSnackbar('Record Updated successfully', { variant: 'success' })
-
-      setFormValues({ OldejHome: '', notes: '', _id: '' })
-      setOpen(false)
+      const responseData = await response.json()
+      if (responseData.success) {
+        enqueueSnackbar('Record Added or Updated successfully', { variant: 'success' })
+        setFormValues({ OldejHome: '', notes: '', _id: '' })
+        setOpen(false)
+      } else if (responseData.error.code === 11000) {
+        enqueueSnackbar('Record Already Exist ', { variant: 'warning' })
+      } else {
+        console.error(responseData)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
   }
 
@@ -75,7 +80,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth>
-        <DialogTitle>{menu._id === '' ? 'Add' : 'Update'} Oldej Home</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Oldej Home</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <TextField
@@ -123,7 +128,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-              Save
+            {menu._id === '' ? 'Save' : 'Update'}
             </Button>
           </DialogActions>
         </Box>

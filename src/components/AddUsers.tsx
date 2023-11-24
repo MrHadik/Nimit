@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Autocomplete from '@mui/material/Autocomplete'
 import Grid from '@mui/material/Grid'
 import AddUsersMedicine from './AddUsersMedicine'
+import { useSnackbar } from 'notistack'
 
 interface Medicine {
   id: number
@@ -33,6 +34,7 @@ interface Props {
 }
 
 export default function AddUsers({ open, setOpen, menu }: Props) {
+  const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = React.useState([])
   // const [medicineList, setMedicineList] = React.useState([])
   const [formValues, setFormValues] = React.useState({
@@ -60,7 +62,6 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
-      console.log(formValues)
       const bodyContent = JSON.stringify(formValues)
 
       const headersList = {
@@ -76,7 +77,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
 
       const responseData = await response.json()
       if (responseData.success) {
-        console.log(responseData)
+        enqueueSnackbar('Record Added or Updated successfully ', { variant: 'success' })
         setFormValues({
           name: '',
           oldejHome: '',
@@ -86,9 +87,12 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
           _id: '',
         })
         setOpen(false)
+      } else {
+        enqueueSnackbar('Soothing Wrong, Check Console or Connect to Hardik ', { variant: 'error' })
       }
     } catch (error) {
-      console.log(error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Connect to Hardik ', { variant: 'error' })
+      console.error(error)
     }
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,11 +106,18 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   }
 
   const getOldejHomeList = async () => {
-    const rawoldejHomeResponse = await fetch('/api/oldejHome')
+    try {
+      const rawoldejHomeResponse = await fetch('/api/oldejHome')
 
-    const oldejHomeResponse = await rawoldejHomeResponse.json()
-    if (oldejHomeResponse.success) {
-      setOldejHomeList(oldejHomeResponse.allOldejHome)
+      const oldejHomeResponse = await rawoldejHomeResponse.json()
+      if (oldejHomeResponse.success) {
+        setOldejHomeList(oldejHomeResponse.allOldejHome)
+      } else {
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+      }
+    } catch (error) {
+      console.error(error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
   }
 
@@ -121,7 +132,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth maxWidth="md">
-        <DialogTitle>{menu._id === '' ? 'Add' : 'Update'} User</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} User</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -167,7 +178,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   />
                 </Grid>
                 <Grid item lg={4} md={4} sm={4} xl={4} xs={12}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , paddingTop: 2}}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 2 }}>
                     <FormControlLabel
                       control={<Checkbox checked={formValues.isActive} onChange={handleInputChange} name="isActive" />}
                       label="Active"
@@ -221,7 +232,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-              Save
+              {menu._id === '' ? 'Save' : 'Update'} User
             </Button>
           </DialogActions>
         </Box>

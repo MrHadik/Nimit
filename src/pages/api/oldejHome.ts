@@ -57,10 +57,10 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     const createdOldejHome = await OldejHome.create({
-      OldejHome: req.body.OldejHome,
-      notes: req.body.notes,
+      OldejHome: (req.body.OldejHome).toUpperCase(),
+      notes: (req.body.notes).toUpperCase(),
     });
-    res.status(201).json({ createdOldejHome , success: true });
+    res.status(201).json({ createdOldejHome, success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error, success: false });
@@ -69,7 +69,10 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const updatedOldejHome = await OldejHome.findByIdAndUpdate(req.body._id, req.body);
+    const updatedOldejHome = await OldejHome.findByIdAndUpdate(req.body._id, {
+      OldejHome: (req.body.OldejHome).toUpperCase(),
+      notes: (req.body.notes).toUpperCase(),
+    });
     res.status(200).json({ updatedOldejHome, success: true });
   } catch (error) {
     console.error(error);

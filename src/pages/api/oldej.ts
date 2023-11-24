@@ -58,13 +58,13 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     const createdUsers = await Users.create({
       grNumber: (await Users.findOne().sort({ _id: -1 }))?.grNumber + 1 || 1,
-      name: req.body.name,
-      oldejHome: req.body.oldejHome,
+      name: (req.body.name).toUpperCase(),
+      oldejHome: (req.body.oldejHome).toUpperCase(),
       isActive: req.body.isActive,
       medicines: req.body.medicines,
-      notes: req.body.notes,
+      notes: (req.body.notes).toUpperCase(),
     });
-    res.status(201).json({ createdUsers , success: true });
+    res.status(201).json({ createdUsers, success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error, success: false });
@@ -73,7 +73,14 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const updatedMedicine = await Users.findByIdAndUpdate(req.body._id, req.body);
+    const updatedMedicine = await Users.findByIdAndUpdate(req.body._id,
+      {
+        name: (req.body.name).toUpperCase(),
+        oldejHome: (req.body.oldejHome).toUpperCase(),
+        isActive: req.body.isActive,
+        medicines: req.body.medicines,
+        notes: (req.body.notes).toUpperCase(),
+      });
     res.status(200).json({ updatedMedicine, success: true });
   } catch (error) {
     console.error(error);

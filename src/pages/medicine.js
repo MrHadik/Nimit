@@ -11,8 +11,10 @@ import Checkbox from '@mui/material/Checkbox'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
 import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
@@ -41,15 +43,17 @@ const Page = () => {
       if (responseData.success) {
         const dataWithIds = responseData.Medicines.map((row, index) => ({
           ...row,
-          // isStar: row.isStar ? <Chip label="success" color="success" /> : <Chip label="primary" color="primary" />,
           id: index + 1,
         }))
 
         setData(dataWithIds)
         setLoading(false)
+      } else {
+        console.error(responseData)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
       }
     } catch (error) {
-      alert(error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
       console.error('Error fetching data:', error)
     }
   }
@@ -59,7 +63,7 @@ const Page = () => {
     {
       field: 'medicineName',
       headerName: 'Medicine Name',
-      width: 150,
+      width: 300,
       editable: true,
     },
     {
@@ -128,9 +132,14 @@ const Page = () => {
         headers: headersList,
       })
 
-      let data = await response.text()
-      console.log(data)
-      GetData()
+      let data = await response.json()
+      if (data.success) {
+        enqueueSnackbar('Record Deleted Successfully', { variant: 'info' })
+        GetData()
+      } else {
+        console.error(data)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+      }
     }
   }
 
@@ -166,7 +175,7 @@ const Page = () => {
                   }}
                   variant="contained"
                 >
-                  Add
+                  New Medicine
                 </Button>
               </div>
             </Stack>
@@ -185,6 +194,11 @@ const Page = () => {
                   }}
                   autoHeight
                   slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                    },
+                  }}
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick
                   editMode="false"

@@ -35,7 +35,7 @@ export const items = [
     ),
   },
   {
-    title: 'Oldej',
+    title: 'Users',
     path: '/oldej',
     icon: (
       <SvgIcon fontSize="small">

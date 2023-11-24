@@ -27,7 +27,7 @@ const App = (props) => {
   const theme = createTheme()
 
   return (
-    <SnackbarProvider maxSnack={3} autoHideDuration={1000}>
+    <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
       <CacheProvider value={emotionCache}>
         <Head>
           <title>Nimit</title>
