@@ -11,8 +11,10 @@ import CheckIcon from '@mui/icons-material/Check'
 import Chip from '@mui/material/Chip'
 import CloseIcon from '@mui/icons-material/Close'
 import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
@@ -31,16 +33,20 @@ const Page = () => {
       if (responseData.success) {
         const dataWithIds = responseData.allUser.map((row, index) => ({
           ...row,
-          // isStar: row.isStar ? <Chip label="success" color="success" /> : <Chip label="primary" color="primary" />,
           id: index + 1,
         }))
 
         setData(dataWithIds)
         setLoading(false)
+      } else {
+        console.error(responseData)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+        setLoading(false)
       }
     } catch (error) {
-      alert(error)
       console.error('Error fetching data:', error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+      setLoading(false)
     }
   }
 
@@ -50,12 +56,12 @@ const Page = () => {
     {
       field: 'name',
       headerName: 'Name',
-      width: 150,
+      width: 300,
     },
     {
       field: 'oldejHome',
-      headerName: 'oldej Home',
-      width: 150,
+      headerName: 'Oldej Home',
+      width: 250,
     },
     {
       field: 'isActive',
@@ -63,7 +69,7 @@ const Page = () => {
       width: 150,
       renderCell: (params) =>
         params.value ? (
-          <Chip color="success" variant="outlined" size="small" label="Active" icon={<CheckIcon/>} />
+          <Chip color="success" variant="outlined" size="small" label="Active" icon={<CheckIcon />} />
         ) : (
           <Chip color="error" variant="outlined" size="small" label="Not Active" icon={<CloseIcon />} />
         ),
@@ -71,7 +77,7 @@ const Page = () => {
     {
       field: 'notes',
       headerName: 'Notes',
-      width: 150,
+      width: 200,
     },
     {
       field: 'actions',
@@ -108,6 +114,7 @@ const Page = () => {
     setMenu(row)
     setOpen(true)
   }
+
   const handleDeleteClick = async (row) => {
     try {
       if (confirm('are you sure to delete ' + row.name + ' ?')) {
@@ -117,12 +124,15 @@ const Page = () => {
 
         let responseData = await response.json()
         if (responseData.success) {
+          enqueueSnackbar('Record Deleted Successfully', { variant: 'info' })
           GetData()
+        } else {
+          console.error('Error fetching data:', responseData)
+          enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'warning' })
         }
-        console.log(data)
       }
     } catch (error) {
-      alert(error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
       console.error('Error fetching data:', error)
     }
   }
@@ -164,34 +174,34 @@ const Page = () => {
               </div>
             </Stack>
             <Box sx={{ height: 450, width: '100%' }}>
-            <Paper elevation={3}>
-              <DataGrid
-                rows={data}
-                columns={columns}
-                loading={loading}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
+              <Paper elevation={3}>
+                <DataGrid
+                  rows={data}
+                  columns={columns}
+                  loading={loading}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
                     },
-                  },
-                }}
-                slotProps={{
-                  toolbar: {
-                    showQuickFilter: true,
-                  },
-                }}
-                autoHeight
-                slots={{ toolbar: GridToolbar }}
-                disableColumnFilter
-                disableColumnSelector
-                disableDensitySelector
-                pageSizeOptions={[5, 10, 50, 100]}
-                rowHeight={40}
-                disableRowSelectionOnClick
-                editMode="false"
-              />
-            </Paper>
+                  }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                    },
+                  }}
+                  autoHeight
+                  slots={{ toolbar: GridToolbar }}
+                  disableColumnFilter
+                  disableColumnSelector
+                  disableDensitySelector
+                  pageSizeOptions={[5, 10, 50, 100]}
+                  rowHeight={40}
+                  disableRowSelectionOnClick
+                  editMode="false"
+                />
+              </Paper>
             </Box>
           </Stack>
         </Container>

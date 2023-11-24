@@ -7,8 +7,10 @@ import Checkbox from '@mui/material/Checkbox'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
 import Paper from '@mui/material/Paper'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
   const [loading, setLoading] = React.useState(true)
 
@@ -23,6 +25,13 @@ const Page = () => {
       const response1 = await RawResponse1.json()
       const RawResponse2 = await fetch('/api/medicine')
       const response2 = await RawResponse2.json()
+
+      if (!response1.success || !response2.success) {
+        console.error('Error fetching data:', response1)
+        console.error('Error fetching data:', response2)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+        return 0
+      }
 
       const isStarMap = {}
       response2.Medicines.forEach((medicine) => {
@@ -39,7 +48,7 @@ const Page = () => {
       setData(response1.Medicines)
       setLoading(false)
     } catch (error) {
-      alert(error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
       console.error('Error fetching data:', error)
     }
   }

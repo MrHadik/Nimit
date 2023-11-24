@@ -16,19 +16,15 @@ const Page = () => {
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
   const [menu, setMenu] = React.useState({ OldejHome: '', notes: '', _id: '' })
+
   useEffect(() => {
     GetData()
   }, [open])
 
   const GetData = async () => {
     setLoading(true)
-
     try {
       let response = await fetch('/api/oldejHome')
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data')
-      }
 
       let responseData = await response.json()
       if (responseData.success) {
@@ -40,10 +36,12 @@ const Page = () => {
 
         setData(dataWithIds)
         setLoading(false)
+      } else {
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
       }
     } catch (error) {
-      alert(error)
       console.error('Error fetching data:', error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
   }
 
@@ -97,17 +95,23 @@ const Page = () => {
     setOpen(true)
   }
   const handleDeleteClick = async (row) => {
-    if (confirm('are you sure to delete ' + row.OldejHome + ' ?')) {
-      let response = await fetch('/api/oldejHome?_id=' + row._id, {
-        method: 'DELETE',
-      })
+    try {
+      if (confirm('are you sure to delete ' + row.OldejHome + ' ?')) {
+        let response = await fetch('/api/oldejHome?_id=' + row._id, {
+          method: 'DELETE',
+        })
 
-      const data = await response.json()
-      data.success
-        ? enqueueSnackbar('Record Deleted successfully', { variant: 'success' })
-        : enqueueSnackbar(data, { variant: 'error' })
-
-      GetData()
+        const data = await response.json()
+        if (data.success) {
+          enqueueSnackbar('Record Deleted successfully', { variant: 'info' })
+          GetData()
+        } else {
+          enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
   }
 

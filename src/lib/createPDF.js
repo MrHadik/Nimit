@@ -1,5 +1,13 @@
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
+
+const columnWidth = {
+  0: { cellWidth: 10 },
+  1: { cellWidth: 75 - 0.1103333334 },
+  2: { cellWidth: 55 - 0.1103333334 },
+  3: { cellWidth: 10 },
+  4: { cellWidth: 32 },
+}
 async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const doc = new jsPDF()
 
@@ -11,13 +19,7 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
     head: [headers], // Add 'oldejHome' heading at the top
     startY: 15,
     theme: 'grid',
-    columnStyles: {
-      0: { cellWidth: 10 },
-      1: { cellWidth: 80 - 0.1103333334 },
-      2: { cellWidth: 60 - 0.1103333334 },
-      3: { cellWidth: 10 },
-      4: { cellWidth: 22 },
-    },
+    columnStyles: columnWidth,
     didDrawPage: function (data) {
       startYPosition = data.table.finalY
     },
@@ -36,13 +38,7 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
       body: formattedMedicines,
       startY: startYPosition,
       theme: 'grid',
-      columnStyles: {
-        0: { cellWidth: 10 },
-        1: { cellWidth: 81 - 0.1103333334 },
-        2: { cellWidth: 61 - 0.1103333334 },
-        3: { cellWidth: 10 },
-        4: { cellWidth: 20 },
-      },
+      columnStyles: columnWidth,
     })
 
     startYPosition = doc.autoTable.previous.finalY + 1

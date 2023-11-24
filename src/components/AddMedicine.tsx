@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Box from '@mui/material/Box'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
+import { useSnackbar } from 'notistack'
 
 interface Props {
   open: boolean
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function AddMedicine({ open, setOpen, menu }: Props) {
+  const { enqueueSnackbar } = useSnackbar()
   const [formValues, setFormValues] = React.useState({
     medicineName: '',
     isStar: false,
@@ -44,24 +46,33 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const bodyContent = JSON.stringify(formValues)
+    try {
+      const headersList = {
+        Accept: '*/*',
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'application/json',
+      }
 
-    const headersList = {
-      Accept: '*/*',
-      'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-      'Content-Type': 'application/json',
-    }
+      const response = await fetch('/api/medicine', {
+        method: formValues._id === '' ? 'POST' : 'PUT',
+        body: bodyContent,
+        headers: headersList,
+      })
 
-    const response = await fetch('/api/medicine', {
-      method: formValues._id === '' ? 'POST' : 'PUT',
-      body: bodyContent,
-      headers: headersList,
-    })
-
-    const responseData = await response.json()
-    if (responseData.success) {
-      console.log(responseData)
-      setFormValues({ medicineName: '', isStar: false, inStock: 0, notes: '', _id: '' })
-      setOpen(false)
+      const responseData = await response.json()
+      if (responseData.success) {
+        enqueueSnackbar('Record Added or Updated successfully', { variant: 'success' })
+        setFormValues({ medicineName: '', isStar: false, inStock: 0, notes: '', _id: '' })
+        setOpen(false)
+      } else if (responseData.error.code === 11000) {
+        enqueueSnackbar('Record Already Exist ', { variant: 'warning' })
+      } else {
+        console.error('Error fetching data:', responseData)
+        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
