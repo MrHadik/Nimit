@@ -88,7 +88,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth>
-        <DialogTitle>{menu._id === '' ? 'Add' : 'Update'} Medicine</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Medicine</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <TextField
@@ -159,7 +159,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-              Save
+              {menu._id === '' ? 'Save' : 'Update'}
             </Button>
           </DialogActions>
         </Box>

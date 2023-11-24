@@ -169,7 +169,7 @@ const Page = () => {
                   }}
                   variant="contained"
                 >
-                  Add User
+                  New User
                 </Button>
               </div>
             </Stack>

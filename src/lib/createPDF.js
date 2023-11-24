@@ -30,9 +30,9 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
 
     const formattedMedicines = medicines.map((medicine) => ['', '', medicine.medicineName, medicine.quantity.toString()])
 
-    formattedMedicines[0][0] = grNumber
-    formattedMedicines[0][1] = name
-    formattedMedicines[0][4] = notes // Adjust index for 'notes'
+    formattedMedicines[0][0] = grNumber // { content: grNumber, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
+    formattedMedicines[0][1] = name // { content: name, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
+    formattedMedicines[0][4] = { content: notes, rowSpan: formattedMedicines.length, styles: { halign: 'center', fontSize: 8 } } // Adjust index for 'notes'
 
     doc.autoTable({
       body: formattedMedicines,

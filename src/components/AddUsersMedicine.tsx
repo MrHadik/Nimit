@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
-import PlusIcon from '@heroicons/react/24/solid/PlusIcon'
 import React, { useState, useEffect } from 'react'
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid'
 import TextField from '@mui/material/TextField'
@@ -11,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import DeleteIcon from '@mui/icons-material/Delete'
-import SvgIcon from '@mui/icons-material/StarBorder'
+import AddIcon from '@mui/icons-material/Add'
 
 interface Medicine {
   id: number
@@ -64,7 +63,7 @@ export default function MedicineList({
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'medicineName', headerName: 'Medicine', width: 200 },
+    { field: 'medicineName', headerName: 'Medicine', width: 230 },
     { field: 'quantity', headerName: 'Quantity', width: 150 },
     {
       field: 'isStar',
@@ -148,7 +147,7 @@ export default function MedicineList({
           />
         </Grid>
         <Grid item lg={4} md={4} sm={4} xl={4} xs={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingX: 1}}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -161,15 +160,7 @@ export default function MedicineList({
               }
               label="Star"
             />
-            <Button
-              variant="contained"
-              startIcon={
-                <SvgIcon fontSize="small">
-                  <PlusIcon />
-                </SvgIcon>
-              }
-              onClick={handleAddMedicine}
-            >
+            <Button variant="contained" startIcon={<AddIcon />} onClick={handleAddMedicine}>
               Add
             </Button>
           </Box>

@@ -132,7 +132,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth maxWidth="md">
-        <DialogTitle>{menu._id === '' ? 'Add' : 'Update'} User</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} User</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -232,7 +232,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-              Save
+              {menu._id === '' ? 'Save' : 'Update'} User
             </Button>
           </DialogActions>
         </Box>

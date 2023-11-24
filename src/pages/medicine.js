@@ -175,7 +175,7 @@ const Page = () => {
                   }}
                   variant="contained"
                 >
-                  Add
+                  New Medicine
                 </Button>
               </div>
             </Stack>
