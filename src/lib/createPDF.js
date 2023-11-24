@@ -10,6 +10,7 @@ const columnWidth = {
 }
 async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const doc = new jsPDF()
+  const StarBgColor = '#fcfdb0'
 
   let startYPosition = 1
   const headers = [
@@ -24,7 +25,6 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
 
   doc.text(oldejHome, 105, 10, null, null, 'center')
   doc.autoTable({
-    showHead: 'everyPage',
     head: headers,
     startY: 15,
     theme: 'striped',
@@ -38,8 +38,28 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
 
     const formattedMedicines = medicines.map((medicine, index) =>
       index === 0
-        ? ['', '', medicine.medicineName, { content: medicine.quantity.toString(), styles: { halign: 'center' } }]
-        : [medicine.medicineName, { content: medicine.quantity.toString(), styles: { halign: 'center' } }],
+        ? [
+            '',
+            '',
+            {
+              content: medicine.medicineName,
+              styles: { fillColor: medicine.isStar ? StarBgColor : null },
+            },
+            {
+              content: medicine.quantity.toString(),
+              styles: { halign: 'center', fillColor: medicine.isStar ? StarBgColor : null },
+            },
+          ]
+        : [
+            {
+              content: medicine.medicineName,
+              styles: { fillColor: medicine.isStar ? StarBgColor : null },
+            },
+            {
+              content: medicine.quantity.toString(),
+              styles: { halign: 'center', fillColor: medicine.isStar ? StarBgColor : null },
+            },
+          ],
     )
 
     formattedMedicines[0][0] = { content: grNumber, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
