@@ -12,27 +12,43 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const doc = new jsPDF()
 
   let startYPosition = 1
-  const headers = ['Sr', 'Name', 'Medicines', 'Quantity', 'Notes'] // Remove 'oldejHome'
+  const headers = [
+    [
+      { content: 'Sr', styles: { cellWidth: 10, halign: 'center' } },
+      { content: 'Name', styles: { cellWidth: 75 - 0.1103333334, halign: 'center' } },
+      { content: 'Medicines', styles: { cellWidth: 51 - 0.1103333334 } },
+      { content: 'Quantity', styles: { cellWidth: 23 } },
+      { content: 'Notes', styles: { cellWidth: 23 } },
+    ],
+  ]
 
   doc.text(oldejHome, 105, 10, null, null, 'center')
   doc.autoTable({
-    head: [headers], // Add 'oldejHome' heading at the top
+    showHead: 'everyPage',
+    head: headers,
     startY: 15,
-    theme: 'grid',
-    columnStyles: columnWidth,
-    didDrawPage: function (data) {
-      startYPosition = data.table.finalY
+    theme: 'striped',
+    didDrawPage: function () {
+      startYPosition = 24 //data.table.finalY
     },
   })
 
   usersData.forEach((user) => {
-    const {grNumber , name, medicines = [], notes } = user // Ensure medicines array is initialized
+    const { grNumber, name, medicines = [], notes } = user // Ensure medicines array is initialized
 
-    const formattedMedicines = medicines.map((medicine) => ['', '', medicine.medicineName, medicine.quantity.toString()])
+    const formattedMedicines = medicines.map((medicine, index) =>
+      index === 0
+        ? ['', '', medicine.medicineName, { content: medicine.quantity.toString(), styles: { halign: 'center' } }]
+        : [medicine.medicineName, { content: medicine.quantity.toString(), styles: { halign: 'center' } }],
+    )
 
-    formattedMedicines[0][0] = grNumber // { content: grNumber, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
-    formattedMedicines[0][1] = name // { content: name, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
-    formattedMedicines[0][4] = { content: notes, rowSpan: formattedMedicines.length, styles: { halign: 'center', fontSize: 8 } } // Adjust index for 'notes'
+    formattedMedicines[0][0] = { content: grNumber, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
+    formattedMedicines[0][1] = { content: name, rowSpan: formattedMedicines.length, styles: { halign: 'center' } }
+    formattedMedicines[0][4] = {
+      content: notes,
+      rowSpan: formattedMedicines.length,
+      styles: { halign: 'center', fontSize: 8 },
+    }
 
     doc.autoTable({
       body: formattedMedicines,
