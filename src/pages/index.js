@@ -1,79 +1,80 @@
 import Head from 'next/head'
-import { Box, Container, Stack, Typography } from '@mui/material'
+import React from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import { Box, Container, Stack, Typography, Paper } from '@mui/material'
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
-import React, { useEffect, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
-import Paper from '@mui/material/Paper'
 import { useSnackbar } from 'notistack'
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    GetData()
-  }, [])
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const [response1, response2] = await Promise.all([
+          fetch('/api/medicine?status=true').then((res) => res.json()),
+          fetch('/api/medicine').then((res) => res.json()),
+        ])
 
-  const GetData = async () => {
-    setLoading(true)
-    try {
-      const RawResponse1 = await fetch('/api/medicine?status=true')
-      const response1 = await RawResponse1.json()
-      const RawResponse2 = await fetch('/api/medicine')
-      const response2 = await RawResponse2.json()
-
-      if (!response1.success || !response2.success) {
-        console.error('Error fetching data:', response1)
-        console.error('Error fetching data:', response2)
-        enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
-        return 0
-      }
-
-      const isStarMap = {}
-      response2.Medicines.forEach((medicine) => {
-        isStarMap[medicine.medicineName] = medicine.isStar
-      })
-
-      response1.Medicines.forEach((medicine) => {
-        const { medicineName } = medicine
-        // eslint-disable-next-line no-prototype-builtins
-        if (isStarMap.hasOwnProperty(medicineName)) {
-          medicine.isStar = isStarMap[medicineName]
+        if (!response1.success || !response2.success) {
+          console.error('Error fetching data:', response1)
+          console.error('Error fetching data:', response2)
+          enqueueSnackbar('Something went wrong. Please check the console or contact Hardik.', { variant: 'error' })
+          return
         }
-      })
-      setData(response1.Medicines)
-      setLoading(false)
-    } catch (error) {
-      enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
-      console.error('Error fetching data:', error)
-    }
-  }
 
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 100 },
-    {
-      field: 'medicineName',
-      headerName: 'Medicine Name',
-      width: 300,
-    },
-    {
-      field: 'quantity',
-      headerName: 'Total Quantity',
-      width: 150,
-    },
-    {
-      field: 'isStar',
-      headerName: 'Star',
-      width: 150,
-      renderCell: (params) => (
-        <Checkbox icon={<StarBorderIcon />} checkedIcon={<StarIcon color="error" />} checked={params.value} disabled />
-      ),
-    },
-  ]
+        const isStarMap = {}
+        response2.Medicines.forEach((medicine) => {
+          isStarMap[medicine.medicineName] = medicine.isStar
+        })
+
+        const updatedMedicines = response1.Medicines.map((medicine) => {
+          // eslint-disable-next-line no-prototype-builtins
+          if (isStarMap.hasOwnProperty(medicine.medicineName)) {
+            return { ...medicine, isStar: isStarMap[medicine.medicineName] }
+          }
+          return medicine
+        })
+
+        setData(updatedMedicines)
+        setLoading(false)
+      } catch (error) {
+        enqueueSnackbar('Something went wrong. Please check the console or contact Hardik.', { variant: 'error' })
+        console.error('Error fetching data:', error)
+      }
+    }
+
+    fetchData()
+  }, [enqueueSnackbar])
+
+  const columns = useMemo(
+    () => [
+      { field: 'id', headerName: 'ID', width: 100 },
+      { field: 'medicineName', headerName: 'Medicine Name', width: 300 },
+      { field: 'quantity', headerName: 'Total Quantity', width: 150 },
+      {
+        field: 'isStar',
+        headerName: 'Star',
+        width: 150,
+        renderCell: (params) => (
+          <Checkbox
+            icon={<StarBorderIcon />}
+            checkedIcon={<StarIcon color="error" />}
+            checked={params.value}
+            disabled
+          />
+        ),
+      },
+    ],
+    [],
+  )
 
   return (
     <>
@@ -119,7 +120,7 @@ const Page = () => {
                   disableColumnSelector
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick
-                  editMode="false"
+                  editMode={false}
                   rowHeight={30}
                 />
               </Paper>

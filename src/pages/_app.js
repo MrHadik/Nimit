@@ -12,19 +12,29 @@ import { createTheme } from 'src/theme'
 import { createEmotionCache } from 'src/utils/create-emotion-cache'
 import 'simplebar-react/dist/simplebar.min.css'
 import { SnackbarProvider } from 'notistack'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const clientSideEmotionCache = createEmotionCache()
 
 const SplashScreen = () => null
 
 const App = (props) => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   useNProgress()
 
   const getLayout = Component.getLayout ?? ((page) => page)
 
-  const theme = createTheme()
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode],
+  );
 
   return (
     <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
