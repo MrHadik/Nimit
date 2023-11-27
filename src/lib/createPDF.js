@@ -13,7 +13,19 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const StarBgColor = '#fcfdb0'
 
   let startYPosition = 1
-  let date = new Date()
+  const utcDate = new Date();
+
+// Get the UTC time in milliseconds
+const utcTime = utcDate.getTime();
+
+// IST offset is UTC+5:30 (in minutes)
+const ISTOffset = 5.5 * 60;
+
+// Calculate IST time in milliseconds
+const ISTTime = utcTime + (ISTOffset * 60 * 1000);
+
+// Create a new Date object with the IST time
+const date = new Date(ISTTime);
 
   const headers = [
     [
