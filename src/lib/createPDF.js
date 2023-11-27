@@ -13,6 +13,8 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const StarBgColor = '#fcfdb0'
 
   let startYPosition = 1
+  let date = new Date()
+
   const headers = [
     [
       { content: 'Sr', styles: { cellWidth: 10, halign: 'center' } },
@@ -79,6 +81,20 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
 
     startYPosition = doc.autoTable.previous.finalY + 1
   })
+
+  let totalPages = doc.internal.getNumberOfPages() // Get total pages
+
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i) // Set current page
+
+    // Add page number
+    doc.setFontSize(7)
+    doc.text('Page ' + i + ' of ' + totalPages, 10, doc.internal.pageSize.height - 5)
+    const textWidth = doc.getStringUnitWidth(oldejHome) / doc.internal.scaleFactor
+    const textX = (doc.internal.pageSize.width - textWidth) / 2
+    doc.text(oldejHome, textX, doc.internal.pageSize.height - 5, null, null, 'center')
+    doc.text(date + '', doc.internal.pageSize.width + 62, doc.internal.pageSize.height - 5, 90, null, 'right')
+  }
 
   return doc.output('arraybuffer')
 }
