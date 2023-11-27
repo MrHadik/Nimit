@@ -93,7 +93,7 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
     const textWidth = doc.getStringUnitWidth(oldejHome) / doc.internal.scaleFactor
     const textX = (doc.internal.pageSize.width - textWidth) / 2
     doc.text(oldejHome, textX, doc.internal.pageSize.height - 5, null, null, 'center')
-    doc.text(date + '', doc.internal.pageSize.width + 67, doc.internal.pageSize.height - 5, 90, null, 'right')
+    doc.text(date + '', doc.internal.pageSize.width + 70, doc.internal.pageSize.height - 5, 90, null, 'right')
   }
 
   return doc.output('arraybuffer')
