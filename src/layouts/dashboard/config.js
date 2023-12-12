@@ -17,7 +17,7 @@ export const items = [
     ),
   },
   {
-    title: 'Oldej Home',
+    title: 'Old Home',
     path: '/oldejHome',
     icon: (
       <SvgIcon fontSize="small">
@@ -35,7 +35,7 @@ export const items = [
     ),
   },
   {
-    title: 'Users',
+    title: 'Elders',
     path: '/oldej',
     icon: (
       <SvgIcon fontSize="small">

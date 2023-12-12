@@ -80,7 +80,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth>
-        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Oldej Home</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Olde Home</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <TextField
