@@ -11,6 +11,8 @@ import Box from '@mui/material/Box'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import StarIcon from '@mui/icons-material/Star'
 import { useSnackbar } from 'notistack'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
 interface Props {
   open: boolean
@@ -25,6 +27,7 @@ interface Props {
 }
 
 export default function AddMedicine({ open, setOpen, menu }: Props) {
+  const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [formValues, setFormValues] = React.useState({
     medicineName: '',
@@ -87,7 +90,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
 
   return (
     <React.Fragment>
-      <Dialog open={open} fullWidth>
+      <Dialog open={open} fullWidth fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
         <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Medicine</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>

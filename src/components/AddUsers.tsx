@@ -11,6 +11,8 @@ import Box from '@mui/material/Box'
 import Autocomplete from '@mui/material/Autocomplete'
 import Grid from '@mui/material/Grid'
 import AddUsersMedicine from './AddUsersMedicine'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 import { useSnackbar } from 'notistack'
 
 interface Medicine {
@@ -34,6 +36,7 @@ interface Props {
 }
 
 export default function AddUsers({ open, setOpen, menu }: Props) {
+  const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = React.useState([])
   // const [medicineList, setMedicineList] = React.useState([])
@@ -131,7 +134,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
 
   return (
     <React.Fragment>
-      <Dialog open={open} fullWidth maxWidth="md">
+      <Dialog open={open} fullWidth maxWidth="md" fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
         <DialogTitle>{menu._id === '' ? 'New' : 'Update'} User</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>

@@ -122,6 +122,9 @@ export const AuthProvider = (props) => {
 
   const signIn = async (email, password) => {
     // if (email !== 'demo@devias.io' || password !== 'Password123!') {
+    // eslint-disable-next-line no-undef
+    console.log(process.env.LOGIN_USER)
+    // eslint-disable-next-line no-undef
     if (email !== 'nimit@007.com' || password !== 'Nimit@007') {
       throw new Error('Please check your email and password')
     }

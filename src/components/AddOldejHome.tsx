@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Box from '@mui/material/Box'
 import { useSnackbar } from 'notistack'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
 interface Props {
   open: boolean
@@ -19,6 +21,7 @@ interface Props {
 }
 
 export default function AddMedicine({ open, setOpen, menu }: Props) {
+  const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [formValues, setFormValues] = React.useState({
     OldejHome: '',
@@ -79,8 +82,8 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
 
   return (
     <React.Fragment>
-      <Dialog open={open} fullWidth>
-        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Oldej Home</DialogTitle>
+      <Dialog open={open} fullWidth fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Olde Home</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <TextField
@@ -128,7 +131,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-            {menu._id === '' ? 'Save' : 'Update'}
+              {menu._id === '' ? 'Save' : 'Update'}
             </Button>
           </DialogActions>
         </Box>

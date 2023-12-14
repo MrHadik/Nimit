@@ -13,6 +13,7 @@ async function generateUsersMedicinesPdf(usersData, oldejHome) {
   const StarBgColor = '#fcfdb0'
 
   let startYPosition = 1
+  
   const utcDate = new Date();
 
 // Get the UTC time in milliseconds
@@ -26,6 +27,7 @@ const ISTTime = utcTime + (ISTOffset * 60 * 1000);
 
 // Create a new Date object with the IST time
 const date = new Date(ISTTime);
+
 
   const headers = [
     [
@@ -104,7 +106,7 @@ const date = new Date(ISTTime);
     doc.text('Page ' + i + ' of ' + totalPages, 10, doc.internal.pageSize.height - 5)
     const textWidth = doc.getStringUnitWidth(oldejHome) / doc.internal.scaleFactor
     const textX = (doc.internal.pageSize.width - textWidth) / 2
-    doc.text(oldejHome, textX, doc.internal.pageSize.height - 5, null, null, 'center')
+    doc.text(oldejHome, textX, doc.internal.pageSize.height - 10, null, null, 'center')
     doc.text(date + '', doc.internal.pageSize.width + 70, doc.internal.pageSize.height - 5, 90, null, 'right')
   }
 
