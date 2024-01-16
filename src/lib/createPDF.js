@@ -107,7 +107,7 @@ const date = new Date(ISTTime);
     const textWidth = doc.getStringUnitWidth(oldejHome) / doc.internal.scaleFactor
     const textX = (doc.internal.pageSize.width - textWidth) / 2
     doc.text(oldejHome, textX, doc.internal.pageSize.height - 10, null, null, 'center')
-    doc.text(date + '', doc.internal.pageSize.width + 60, doc.internal.pageSize.height - 10, 90, null, 'right')
+    doc.text(date + '', doc.internal.pageSize.width + 65, doc.internal.pageSize.height - 10, 90, null, 'right')
   }
 
   return doc.output('arraybuffer')
