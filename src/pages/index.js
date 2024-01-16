@@ -31,18 +31,24 @@ const Page = () => {
         }
 
         const isStarMap = {}
+        const StockMap = {}
         response2.Medicines.forEach((medicine) => {
           isStarMap[medicine.medicineName] = medicine.isStar
+          StockMap[medicine.medicineName] = medicine.inStock
         })
 
         const updatedMedicines = response1.Medicines.map((medicine) => {
           // eslint-disable-next-line no-prototype-builtins
           if (isStarMap.hasOwnProperty(medicine.medicineName)) {
-            return { ...medicine, isStar: isStarMap[medicine.medicineName] }
+            return {
+              ...medicine,
+              isStar: isStarMap[medicine.medicineName],
+              inStock: StockMap[medicine.medicineName] ? StockMap[medicine.medicineName] : 0,
+            }
           }
           return medicine
         })
-
+        console.log(StockMap)
         setData(updatedMedicines)
         setLoading(false)
       } catch (error) {
@@ -58,7 +64,8 @@ const Page = () => {
     () => [
       { field: 'id', headerName: 'ID', width: 100 },
       { field: 'medicineName', headerName: 'Medicine Name', width: 300 },
-      { field: 'quantity', headerName: 'Total Quantity', width: 150 },
+      { field: 'quantity', headerName: 'Quantity Required', width: 200 },
+      { field: 'inStock', headerName: 'Total Stock', width: 150 },
       {
         field: 'isStar',
         headerName: 'Star',
@@ -117,7 +124,6 @@ const Page = () => {
                   }}
                   slots={{ toolbar: GridToolbar }}
                   disableColumnFilter
-                  disableColumnSelector
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick
                   editMode={false}

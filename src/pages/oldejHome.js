@@ -160,7 +160,7 @@ const Page = () => {
                   initialState={{
                     pagination: {
                       paginationModel: {
-                        pageSize: 5,
+                        pageSize: 10,
                       },
                     },
                   }}
@@ -169,6 +169,7 @@ const Page = () => {
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick
                   editMode="false"
+                  rowHeight={40}
                 />
               </Paper>
             </Box>

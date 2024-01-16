@@ -55,7 +55,7 @@ const Page = () => {
     { field: 'grNumber', headerName: 'GR Number', width: 130 },
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: 'Elder Name',
       width: 300,
     },
     {
@@ -117,7 +117,13 @@ const Page = () => {
 
   const handleDeleteClick = async (row) => {
     try {
-      if (confirm('are you sure to delete ' + row.name + ' ?')) {
+      if (
+        confirm(
+          'Ruko Sabar karo.\nAre you sure to delete ' +
+            row.name +
+            ' ?\nafter Deleting this Elder will Permanent Delete in Database.',
+        )
+      ) {
         let response = await fetch('/api/oldej?_id=' + row._id, {
           method: 'DELETE',
         })
@@ -140,7 +146,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Users</title>
+        <title>Elders</title>
       </Head>
       <Box
         component="main"
@@ -154,7 +160,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Users</Typography>
+                <Typography variant="h4">Elders List</Typography>
               </Stack>
               <div>
                 <Button
@@ -169,7 +175,7 @@ const Page = () => {
                   }}
                   variant="contained"
                 >
-                  New User
+                  New Elder
                 </Button>
               </div>
             </Stack>

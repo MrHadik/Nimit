@@ -122,12 +122,18 @@ const Page = () => {
     setOpen(true)
   }
   const handleDeleteClick = async (row) => {
-    if (confirm('are you sure to delete ' + row.medicineName + ' ?')) {
+    if (
+      confirm(
+        'Ruko Sabar karo.\nAre you sure to delete ' +
+          row.medicineName +
+          ' ?\nafter Deleting this medicine will Not Show in Overview (Total Medicines)',
+      )
+    ) {
       let headersList = {
         Accept: '*/*',
       }
 
-      let response = await fetch('/api/medicine?_id=' + row._id, {
+      let response = await fetch('3/api/medicine?_id=' + row._id, {
         method: 'DELETE',
         headers: headersList,
       })
@@ -188,7 +194,7 @@ const Page = () => {
                   initialState={{
                     pagination: {
                       paginationModel: {
-                        pageSize: 5,
+                        pageSize: 10,
                       },
                     },
                   }}
@@ -202,6 +208,7 @@ const Page = () => {
                   pageSizeOptions={[5, 10, 50, 100]}
                   disableRowSelectionOnClick
                   editMode="false"
+                  rowHeight={30}
                 />
               </Paper>
             </Box>

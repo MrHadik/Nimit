@@ -135,7 +135,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth maxWidth="md" fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
-        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} User</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Elder</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -145,7 +145,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                     margin="dense"
                     id="name"
                     value={formValues.name}
-                    label="Name"
+                    label="Elder Name"
                     name="name"
                     required
                     type="text"
@@ -197,7 +197,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                     value={formValues.notes}
                     id="notes"
                     name="notes"
-                    label="Notes"
+                    label="Notes for Elder"
                     type="text"
                     multiline
                     rows={2}
@@ -235,7 +235,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
               Cancel
             </Button>
             <Button variant="contained" type="submit">
-              {menu._id === '' ? 'Save' : 'Update'} User
+              {menu._id === '' ? 'Save' : 'Update'} Elder
             </Button>
           </DialogActions>
         </Box>
