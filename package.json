@@ -25,6 +25,7 @@
     "@mui/system": "5.11.9",
     "@mui/x-data-grid": "^6.18.1",
     "@mui/x-date-pickers": "5.0.19",
+    "@vercel/analytics": "^1.1.1",
     "apexcharts": "3.37.0",
     "date-fns": "2.29.3",
     "formik": "2.2.9",

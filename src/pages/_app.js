@@ -13,6 +13,7 @@ import { createEmotionCache } from 'src/utils/create-emotion-cache'
 import 'simplebar-react/dist/simplebar.min.css'
 import { SnackbarProvider } from 'notistack'
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Analytics } from '@vercel/analytics/react';
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -43,6 +44,7 @@ const App = (props) => {
           <title>Nimit</title>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
+        <Analytics />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <AuthProvider>
             <ThemeProvider theme={theme}>
