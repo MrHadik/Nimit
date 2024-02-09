@@ -13,6 +13,8 @@ import StarIcon from '@mui/icons-material/Star'
 import { useSnackbar } from 'notistack'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
 
 interface Props {
   open: boolean
@@ -27,6 +29,7 @@ interface Props {
 }
 
 export default function AddMedicine({ open, setOpen, menu }: Props) {
+  const [loading, setLoading] = React.useState(false);
   const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [formValues, setFormValues] = React.useState({
@@ -48,6 +51,7 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setLoading(true)
     const bodyContent = JSON.stringify(formValues)
     try {
       const headersList = {
@@ -66,14 +70,18 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
       if (responseData.success) {
         enqueueSnackbar('Record Added or Updated successfully', { variant: 'success' })
         setFormValues({ medicineName: '', isStar: false, inStock: 0, notes: '', _id: '' })
+        setLoading(false)
         setOpen(false)
       } else if (responseData.error.code === 11000) {
         enqueueSnackbar('Record Already Exist ', { variant: 'warning' })
+        setLoading(false)
       } else {
         console.error('Error fetching data:', responseData)
         enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       console.error('Error fetching data:', error)
       enqueueSnackbar('Soothing Wrong, Check Console or Contact to Hardik', { variant: 'error' })
     }
@@ -161,9 +169,9 @@ export default function AddMedicine({ open, setOpen, menu }: Props) {
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <LoadingButton variant="contained" type="submit" loadingPosition="start" loading={loading} startIcon={<SaveIcon />}>
               {menu._id === '' ? 'Save' : 'Update'}
-            </Button>
+            </LoadingButton>
           </DialogActions>
         </Box>
       </Dialog>
