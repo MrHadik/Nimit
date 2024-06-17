@@ -18,7 +18,7 @@ const Page = () => {
   const [data, setData] = useState([])
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
-  const [menu, setMenu] = React.useState({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
+  const [menu, setMenu] = React.useState({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '', grNumber: 0 })
   useEffect(() => {
     GetData()
   }, [open])
@@ -170,7 +170,7 @@ const Page = () => {
                     </SvgIcon>
                   }
                   onClick={() => {
-                    setMenu({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '' })
+                    setMenu({ name: '', oldejHome: '', isActive: true, medicines: [], notes: '', _id: '', grNumber: 0 })
                     setOpen(true)
                   }}
                   variant="contained"

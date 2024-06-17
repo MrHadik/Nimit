@@ -43,7 +43,7 @@ export default function MedicineList({
   const handleAddMedicine = () => {
     if (medicineName.trim() !== '' && quantity.trim() !== '') {
       const newMedicine: Medicine = {
-        id: medicineList.length + 1,
+        id: medicineList.length === 0 ? 1 : medicineList[medicineList.length - 1 ].id + 1 ,
         medicineName,
         quantity,
         isStar,

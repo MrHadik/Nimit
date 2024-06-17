@@ -26,6 +26,7 @@ interface Props {
   open: boolean
   setOpen: (boolean) => void
   menu: {
+    grNumber: number
     name: string
     isActive: boolean
     oldejHome: string
@@ -47,6 +48,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
     medicines: menu.medicines,
     notes: menu.notes,
     _id: menu._id,
+    grNumber: menu.grNumber
   })
   React.useEffect(() => {
     getOldejHomeList()
@@ -60,6 +62,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
       medicines: menu.medicines,
       notes: menu.notes || '',
       _id: menu._id || '',
+      grNumber: menu.grNumber || 0
     })
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -88,6 +91,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
           medicines: [],
           notes: '',
           _id: '',
+          grNumber: 0
         })
         setOpen(false)
       } else {
@@ -135,7 +139,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth maxWidth="md" fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
-        <DialogTitle>{menu._id === '' ? 'New' : 'Update'} Elder</DialogTitle>
+        <DialogTitle>{menu._id === '' ? 'New Elder' : 'Update Elder ' } { menu._id === '' ? '' : 'GR Number: '+ menu.grNumber}</DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -228,6 +232,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   medicines: menu.medicines || [],
                   notes: menu.notes || '',
                   _id: menu._id || '',
+                  grNumber: menu.grNumber || 0
                 })
                 setOpen(false)
               }}
