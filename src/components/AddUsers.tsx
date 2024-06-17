@@ -14,6 +14,8 @@ import AddUsersMedicine from './AddUsersMedicine'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { useSnackbar } from 'notistack'
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
 
 interface Medicine {
   id: number
@@ -37,6 +39,7 @@ interface Props {
 }
 
 export default function AddUsers({ open, setOpen, menu }: Props) {
+  const [loading, setLoading] = React.useState(false);
   const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = React.useState([])
@@ -67,6 +70,7 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setLoading(true)
     try {
       const bodyContent = JSON.stringify(formValues)
 
@@ -93,11 +97,14 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
           _id: '',
           grNumber: 0
         })
+        setLoading(false)
         setOpen(false)
       } else {
+        setLoading(false)
         enqueueSnackbar('Soothing Wrong, Check Console or Connect to Hardik ', { variant: 'error' })
       }
     } catch (error) {
+      setLoading(false)
       enqueueSnackbar('Soothing Wrong, Check Console or Connect to Hardik ', { variant: 'error' })
       console.error(error)
     }
@@ -239,9 +246,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
             >
               Cancel
             </Button>
-            <Button variant="contained" type="submit">
+            <LoadingButton variant="contained" type="submit" loadingPosition="start" loading={loading} startIcon={<SaveIcon />}>
               {menu._id === '' ? 'Save' : 'Update'} Elder
-            </Button>
+            </LoadingButton>
           </DialogActions>
         </Box>
       </Dialog>

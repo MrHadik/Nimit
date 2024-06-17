@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    if (req.query._id) {
+    if (req.query._id && req.query._id == undefined && req.query._id == '' ) {
       const id = Array.isArray(req.query._id) ? req.query._id[0] : req.query._id;
       const oneUser = await Users.findById(id as string);
       if (oneUser == null) {
