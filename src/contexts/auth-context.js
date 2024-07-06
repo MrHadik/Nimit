@@ -127,8 +127,14 @@ export const AuthProvider = (props) => {
     // eslint-disable-next-line no-undef
     console.log(process.env.LOGIN_USER)
     // eslint-disable-next-line no-undef
-    if (email !== 'nimit@007.com' || password !== 'Nimit@007') {
-      throw new Error('Please check your email and password')
+    if (window.location.hostname == 'nimit-demo.vercel.app') {
+      if (email !== 'demo@gmail.com' || password !== 'Passwd123') {
+        throw new Error('Please check your email and password')
+      }
+    } else {
+      if (email !== 'nimit@007.com' || password !== 'Nimit@007') {
+        throw new Error('Please check your email and password')
+      }
     }
 
     try {

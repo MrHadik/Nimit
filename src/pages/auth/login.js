@@ -26,10 +26,10 @@ const Page = () => {
   // const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      // email: 'demo@devias.io',
-      // password: 'Password123!',
-      email: '',
-      password: '',
+      email: window.location.hostname == 'nimit-demo.vercel.app' ? 'demo@gmail.com' : '',
+      password: window.location.hostname == 'nimit-demo.vercel.app' ? 'Passwd123' : '',
+      // email: '',
+      // password: '',
       submit: null
     },
     validationSchema: Yup.object({
