@@ -231,11 +231,12 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                 </Grid>
               </Grid>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 2 }}>
-              <div>
-                {formValues.createdAt === ''
-                  ? ''
-                  : 'Created: ' +
+            {formValues.createdAt === '' ? (
+              ''
+            ) : (
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 2 }}>
+                <div>
+                  {'Created: ' +
                     new Date(formValues.createdAt).toLocaleDateString('en-GB', {
                       day: 'numeric',
                       month: 'numeric',
@@ -248,11 +249,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                       second: 'numeric',
                       hour12: true,
                     })}
-              </div>
-              <div>
-                {formValues.updatedAt === ''
-                  ? ''
-                  : 'Updated: ' +
+                </div>
+                <div>
+                  {'Updated: ' +
                     new Date(formValues.updatedAt).toLocaleDateString('en-GB', {
                       day: 'numeric',
                       month: 'numeric',
@@ -265,9 +264,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                       second: 'numeric',
                       hour12: true,
                     })}
-              </div>
-            </Box>
-
+                </div>
+              </Box>
+            )}
             <TextField
               value={formValues._id}
               id="_id"
