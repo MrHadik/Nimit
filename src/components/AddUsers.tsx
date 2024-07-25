@@ -14,8 +14,8 @@ import AddUsersMedicine from './AddUsersMedicine'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { useSnackbar } from 'notistack'
-import LoadingButton from '@mui/lab/LoadingButton';
-import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton'
+import SaveIcon from '@mui/icons-material/Save'
 
 interface Medicine {
   id: number
@@ -35,11 +35,13 @@ interface Props {
     medicines: Array<Medicine>
     notes: string
     _id: string
+    createdAt: string
+    updatedAt: string
   }
 }
 
 export default function AddUsers({ open, setOpen, menu }: Props) {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false)
   const theme = useTheme()
   const { enqueueSnackbar } = useSnackbar()
   const [oldejHomeList, setOldejHomeList] = React.useState([])
@@ -51,7 +53,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
     medicines: menu.medicines,
     notes: menu.notes,
     _id: menu._id,
-    grNumber: menu.grNumber
+    grNumber: menu.grNumber,
+    createdAt: menu.createdAt,
+    updatedAt: menu.updatedAt,
   })
   React.useEffect(() => {
     getOldejHomeList()
@@ -65,13 +69,17 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
       medicines: menu.medicines,
       notes: menu.notes || '',
       _id: menu._id || '',
-      grNumber: menu.grNumber || 0
+      grNumber: menu.grNumber || 0,
+      createdAt: menu.createdAt || '',
+      updatedAt: menu.updatedAt || '',
     })
   }, [menu])
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
     try {
+      delete formValues.createdAt
+      delete formValues.updatedAt
       const bodyContent = JSON.stringify(formValues)
 
       const headersList = {
@@ -95,7 +103,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
           medicines: [],
           notes: '',
           _id: '',
-          grNumber: 0
+          grNumber: 0,
+          createdAt: '',
+          updatedAt: '',
         })
         setLoading(false)
         setOpen(false)
@@ -146,7 +156,9 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
   return (
     <React.Fragment>
       <Dialog open={open} fullWidth maxWidth="md" fullScreen={useMediaQuery(theme.breakpoints.down('md'))}>
-        <DialogTitle>{menu._id === '' ? 'New Elder' : 'Update Elder ' } { menu._id === '' ? '' : 'GR Number: '+ menu.grNumber}</DialogTitle>
+        <DialogTitle>
+          {menu._id === '' ? 'New Elder' : 'Update Elder '} {menu._id === '' ? '' : 'GR Number: ' + menu.grNumber}
+        </DialogTitle>
         <Box component="form" onSubmit={handleSubmit} autoComplete="off">
           <DialogContent>
             <Box sx={{ flexGrow: 1 }}>
@@ -219,6 +231,25 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                 </Grid>
               </Grid>
             </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 2 }}>
+              <div>
+                {formValues.createdAt === ''
+                  ? ''
+                  : 'Created: ' +
+                    new Date(formValues.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }) +
+                    ' ' +
+                    new Date(formValues.createdAt).toLocaleTimeString()}
+              </div>
+              <div>
+                {formValues.updatedAt === ''
+                  ? ''
+                  : 'Updated: ' +
+                    new Date(formValues.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }) +
+                    ' ' +
+                    new Date(formValues.updatedAt).toLocaleTimeString()}
+              </div>
+            </Box>
+
             <TextField
               value={formValues._id}
               id="_id"
@@ -239,14 +270,22 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                   medicines: menu.medicines || [],
                   notes: menu.notes || '',
                   _id: menu._id || '',
-                  grNumber: menu.grNumber || 0
+                  grNumber: menu.grNumber || 0,
+                  createdAt: menu.createdAt || '',
+                  updatedAt: menu.updatedAt || '',
                 })
                 setOpen(false)
               }}
             >
               Cancel
             </Button>
-            <LoadingButton variant="contained" type="submit" loadingPosition="start" loading={loading} startIcon={<SaveIcon />}>
+            <LoadingButton
+              variant="contained"
+              type="submit"
+              loadingPosition="start"
+              loading={loading}
+              startIcon={<SaveIcon />}
+            >
               {menu._id === '' ? 'Save' : 'Update'} Elder
             </LoadingButton>
           </DialogActions>
