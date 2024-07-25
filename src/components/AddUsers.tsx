@@ -236,17 +236,35 @@ export default function AddUsers({ open, setOpen, menu }: Props) {
                 {formValues.createdAt === ''
                   ? ''
                   : 'Created: ' +
-                    new Date(formValues.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }) +
+                    new Date(formValues.createdAt).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'numeric',
+                      year: 'numeric',
+                    }) +
                     ' ' +
-                    new Date(formValues.createdAt).toLocaleTimeString()}
+                    new Date(formValues.createdAt).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      second: 'numeric',
+                      hour12: true,
+                    })}
               </div>
               <div>
                 {formValues.updatedAt === ''
                   ? ''
                   : 'Updated: ' +
-                    new Date(formValues.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' }) +
+                    new Date(formValues.updatedAt).toLocaleDateString('en-GB', {
+                      day: 'numeric',
+                      month: 'numeric',
+                      year: 'numeric',
+                    }) +
                     ' ' +
-                    new Date(formValues.updatedAt).toLocaleTimeString()}
+                    new Date(formValues.updatedAt).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      second: 'numeric',
+                      hour12: true,
+                    })}
               </div>
             </Box>
 
