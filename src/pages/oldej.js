@@ -12,9 +12,10 @@ import Chip from '@mui/material/Chip'
 import CloseIcon from '@mui/icons-material/Close'
 import Paper from '@mui/material/Paper'
 import { useSnackbar } from 'notistack'
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import { pink, green, red } from '@mui/material/colors'
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -31,7 +32,8 @@ const Page = () => {
     _id: '',
     grNumber: 0,
     updatedAt: '',
-    createdAt: '' })
+    createdAt: '',
+  })
   useEffect(() => {
     GetData()
   }, [open, active])
@@ -40,7 +42,13 @@ const Page = () => {
     setLoading(true)
 
     try {
-      let response = await fetch(active === 'active'? '/api/oldej?active=true': active === 'inactive'? '/api/oldej?active=false': '/api/oldej' )
+      let response = await fetch(
+        active === 'active'
+          ? '/api/oldej?active=true'
+          : active === 'inactive'
+            ? '/api/oldej?active=false'
+            : '/api/oldej',
+      )
 
       let responseData = await response.json()
       if (responseData.success) {
@@ -192,7 +200,8 @@ const Page = () => {
                       _id: '',
                       grNumber: 0,
                       updatedAt: '',
-                      createdAt: '' })
+                      createdAt: '',
+                    })
                     setOpen(true)
                   }}
                   variant="contained"
@@ -201,18 +210,47 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-            <RadioGroup
-                  row
-                  aria-label="Filter Elders"
-                  name="row-radio-buttons-group"
-                  value={active}
-                  onChange={(e) => setActive(e.target.value)}
-                >
-                  <FormControlLabel value="active" control={<Radio />}  label="Active" />
-                  <FormControlLabel value="inactive" control={<Radio />} label="Inactive" />
-                  <FormControlLabel value="all" control={<Radio />} label="All"/>
-                  </RadioGroup>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <RadioGroup
+                row
+                aria-label="Filter Elders"
+                name="row-radio-buttons-group"
+                value={active}
+                onChange={(e) => setActive(e.target.value)}
+              >
+                <FormControlLabel
+                  value="active"
+                  style={{color: green[800]}}
+                  control={
+                    <Radio
+                      color="success"
+                      sx={{
+                        color: green[800],
+                        '&.Mui-checked': {
+                          color: green[600],
+                        },
+                      }}
+                    />
+                  }
+                  label="Active"
+                />
+                <FormControlLabel
+                  value="inactive"
+                  style={{color: red['A700']}}
+                  control={
+                    <Radio
+                      sx={{
+                        color: red['A700'],
+                        '&.Mui-checked': {
+                          color: red[600],
+                        },
+                      }}
+                    />
+                  }
+                  label="Inactive"
+                />
+                <FormControlLabel value="all" control={<Radio />} label="All" />
+              </RadioGroup>
             </div>
             <Box sx={{ height: 450, width: '100%' }}>
               <Paper elevation={3}>
