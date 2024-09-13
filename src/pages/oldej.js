@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { pink, green, red } from '@mui/material/colors'
+import { green, red } from '@mui/material/colors'
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
