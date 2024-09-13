@@ -175,18 +175,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Elders List</Typography>
               </Stack>
-              <div style={{display: 'flex'}}>
-              <RadioGroup
-                  row
-                  aria-label="Filter Elders"
-                  name="row-radio-buttons-group"
-                  value={active}
-                  onChange={(e) => setActive(e.target.value)}
-                >
-                  <FormControlLabel value="active" control={<Radio />}  label="Active" />
-                  <FormControlLabel value="inactive" control={<Radio />} label="Inactive" />
-                  <FormControlLabel value="all" control={<Radio />} label="All"/>
-                  </RadioGroup>
+              <div>
                 <Button
                   startIcon={
                     <SvgIcon fontSize="small">
@@ -212,6 +201,19 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+            <RadioGroup
+                  row
+                  aria-label="Filter Elders"
+                  name="row-radio-buttons-group"
+                  value={active}
+                  onChange={(e) => setActive(e.target.value)}
+                >
+                  <FormControlLabel value="active" control={<Radio />}  label="Active" />
+                  <FormControlLabel value="inactive" control={<Radio />} label="Inactive" />
+                  <FormControlLabel value="all" control={<Radio />} label="All"/>
+                  </RadioGroup>
+            </div>
             <Box sx={{ height: 450, width: '100%' }}>
               <Paper elevation={3}>
                 <DataGrid
