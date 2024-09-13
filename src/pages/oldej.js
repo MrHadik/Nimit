@@ -12,10 +12,14 @@ import Chip from '@mui/material/Chip'
 import CloseIcon from '@mui/icons-material/Close'
 import Paper from '@mui/material/Paper'
 import { useSnackbar } from 'notistack'
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState([])
+  const [active, setActive] = useState('all')
   const [open, setOpen] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
   const [menu, setMenu] = React.useState({
@@ -30,13 +34,13 @@ const Page = () => {
     createdAt: '' })
   useEffect(() => {
     GetData()
-  }, [open])
+  }, [open, active])
 
   const GetData = async () => {
     setLoading(true)
 
     try {
-      let response = await fetch('/api/oldej')
+      let response = await fetch(active === 'active'? '/api/oldej?active=true': active === 'inactive'? '/api/oldej?active=false': '/api/oldej' )
 
       let responseData = await response.json()
       if (responseData.success) {
@@ -171,7 +175,18 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Elders List</Typography>
               </Stack>
-              <div>
+              <div style={{display: 'flex'}}>
+              <RadioGroup
+                  row
+                  aria-label="Filter Elders"
+                  name="row-radio-buttons-group"
+                  value={active}
+                  onChange={(e) => setActive(e.target.value)}
+                >
+                  <FormControlLabel value="active" control={<Radio />}  label="Active" />
+                  <FormControlLabel value="inactive" control={<Radio />} label="Inactive" />
+                  <FormControlLabel value="all" control={<Radio />} label="All"/>
+                  </RadioGroup>
                 <Button
                   startIcon={
                     <SvgIcon fontSize="small">

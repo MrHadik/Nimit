@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
-    if (req.query._id && req.query._id == undefined && req.query._id == '' ) {
+    if (req.query._id && req.query._id == undefined && req.query._id !== '' ) {
       const id = Array.isArray(req.query._id) ? req.query._id[0] : req.query._id;
       const oneUser = await Users.findById(id as string);
       if (oneUser == null) {
@@ -44,6 +44,12 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
         return;
       }
       res.status(200).json({ oneUser, success: true });
+    } else if (req.query.active === 'true') {
+        const allUser = await Users.find({isActive: true});
+        res.status(200).json({ allUser, success: true });
+    } else if (req.query.active === 'false') {
+      const allUser = await Users.find({isActive: false});
+      res.status(200).json({ allUser, success: true });
     } else {
       const allUser = await Users.find();
       res.status(200).json({ allUser, success: true });
