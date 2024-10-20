@@ -12,15 +12,22 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
 function Pect() {
   const [allRecordList, setAllRecordList] = useState([]);
+  const [filteredRecordList, setFilteredRecordList] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [record, setRecord] = useState({ date: new Date(), message: '', amount: 0, lastBalance: 0 });
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     getList();
   }, []);
+
+  useEffect(() => {
+    filterRecordsByDate();
+  }, [startDate, endDate, allRecordList]);
 
   const getList = async () => {
     try {
@@ -31,6 +38,7 @@ function Pect() {
       if (responseData.success) {
         setAllRecordList(responseData.records);
         setBalance(responseData.balance);
+        setFilteredRecordList(responseData.records); // Set initial filtered records to all records
       }
     } catch (error) {
       enqueueSnackbar('Error fetching records', { variant: 'error' });
@@ -38,6 +46,31 @@ function Pect() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const filterRecordsByDate = () => {
+    if (!startDate || !endDate) {
+      setFilteredRecordList(allRecordList); // Show all records if no date filter is applied
+    } else {
+      const filtered = allRecordList.filter((record) => {
+        const recordDate = new Date(record.date);
+        return recordDate >= startDate && recordDate <= endDate;
+      });
+      setFilteredRecordList(filtered);
+    }
+  };
+
+  const handleStartDateChange = (newDate) => {
+    setStartDate(newDate);
+  };
+
+  const handleEndDateChange = (newDate) => {
+    setEndDate(newDate);
+  };
+
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const handleDateChange = (newDate) => {
@@ -184,20 +217,45 @@ function Pect() {
                 value={record.amount}
                 onChange={handleInputChange}
               />
-              <Button onClick={handleAddRecord} fullWidth size="sm" disabled={loading} variant="contained">
-                {loading ? <CircularProgress size={24} /> : 'Add Record'}
+              <Button onClick={handleAddRecord} fullWidth size="sm" loading={loading} variant="contained"> Add Record </Button>
+            </Stack>
+          </Paper>
+
+          <Paper elevation={3} sx={{ padding: 5, marginTop: 2 }}>
+            <Stack spacing={2} direction="row" justifyContent="space-between">
+              <MobileDatePicker
+                label="Start Date"
+                value={startDate}
+                onChange={handleStartDateChange}
+                inputFormat="dd/MM/yyyy"
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <MobileDatePicker
+                label="End Date"
+                value={endDate}
+                onChange={handleEndDateChange}
+                inputFormat="dd/MM/yyyy"
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Button
+                onClick={handleClearFilters}
+                variant="outlined"
+                color="primary"
+                size="small"
+              >
+                Clear Filters
               </Button>
             </Stack>
           </Paper>
 
-          {allRecordList.length > 0 && (
+          {filteredRecordList.length > 0 && (
             <Paper elevation={3} sx={{ padding: 5, marginY: 2 }}>
               <Button
                 sx={{ marginBottom: 2 }}
                 onClick={handleOpenDialog}
                 color='error'
                 fullWidth
-                size="sm"
+                size="small"
                 disabled={loading}
                 variant="outlined"
               >
@@ -210,33 +268,37 @@ function Pect() {
                     <TableRow>
                       <TableCell>#</TableCell>
                       <TableCell>Date</TableCell>
-                      <TableCell sx={{ width: '40%' }}>Message</TableCell>
+                      <TableCell>Message</TableCell>
                       <TableCell>Balance</TableCell>
                       <TableCell>Amount</TableCell>
-                      <TableCell>Action</TableCell>
+                      <TableCell>Delete</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {allRecordList.map((record, index) => (
-                      <TableRow key={index}>
+                    {filteredRecordList.map((row, index) => (
+                      <TableRow key={row._id}>
                         <TableCell>{index + 1}</TableCell>
-                        <TableCell>{new Date(record.date).toLocaleDateString('in')}</TableCell>
-                        <TableCell>{record.message}</TableCell>
+                        <TableCell>{new Date(row.date).toLocaleDateString('en-IN')}</TableCell>
+                        <TableCell>{row.message}</TableCell>
                         <TableCell>{new Intl.NumberFormat('en-IN', {
                           style: 'currency',
                           currency: 'INR',
                           minimumFractionDigits: 0
-                        }).format(record.lastBalance)}
+                        }).format(row.lastBalance)}
                         </TableCell>
                         <TableCell>{new Intl.NumberFormat('en-IN', {
                           style: 'currency',
                           currency: 'INR',
                           minimumFractionDigits: 0
-                        }).format(record.amount)}
+                        }).format(row.amount)}
                         </TableCell>
                         <TableCell>
-                          <Button color='error' size="sm" onClick={() => handleDeleteRecord(record._id)}>
-                            <SvgIcon color='red' fontSize="small">
+                          <Button
+                            color='error'
+                            size="sm"
+                            onClick={() => handleDeleteRecord(row._id)}
+                          >
+                            <SvgIcon fontSize="small">
                               <TrashIcon />
                             </SvgIcon>
                           </Button>
@@ -249,25 +311,34 @@ function Pect() {
             </Paper>
           )}
 
-          {/* Clear Records Confirmation Dialog */}
           <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-            <DialogTitle>Clear Records</DialogTitle>
+            <DialogTitle>Clear All Records</DialogTitle>
             <DialogContent>
               <DialogContentText>
                 Are you sure you want to clear all records? This action cannot be undone.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog} color="primary">Cancel</Button>
-              <Button onClick={handleClearRecord} color="error">Clear Records</Button>
+              <Button onClick={handleClearRecord}>Clear All</Button>
+              <Button onClick={handleCloseDialog}>Cancel</Button>
             </DialogActions>
           </Dialog>
+
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <CircularProgress />
+            </Box>
+          )}
         </Container>
       </Box>
     </>
   );
 }
 
-Pect.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Pect.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 export default Pect;
