@@ -144,19 +144,18 @@ function Pect() {
     {
       field: 'id',
       headerName: '#',
-      width: 50
+      width: 70
     },
     {
       field: 'date',
       headerName: 'Date',
-      width: 100,
+      width: 120,
       valueFormatter: (params) => new Date(params.value).toLocaleDateString('en-IN')
     },
     {
       field: 'message',
       headerName: 'Message',
-      width: 300,
-      flex: 1,
+      width: 320,
       renderCell: (params) => (
         <div style={{
           whiteSpace: 'normal',
@@ -171,7 +170,7 @@ function Pect() {
     {
       field: 'lastBalance',
       headerName: 'Balance',
-      width: 100,
+      width: 120,
       valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
         style: 'currency',
         currency: 'INR',
@@ -192,7 +191,7 @@ function Pect() {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 50,
+      width: 80,
       getActions: (params) => [
         <Button
           key={params.id}
@@ -296,10 +295,8 @@ function Pect() {
             </Stack>
           </Paper> */}
 
-          {filteredRecordList.length > 0 && (
-            <Paper elevation={3} sx={{ padding: 5, marginY: 2 }}>
+            <Paper elevation={3} sx={{ paddingX: 5,paddingY: 3, marginY: 2 }}>
               <Button
-                sx={{ marginBottom: 2 }}
                 onClick={handleOpenDialog}
                 color='error'
                 fullWidth
@@ -309,7 +306,11 @@ function Pect() {
               >
                 Clear Records
               </Button>
+              </Paper>
 
+
+          {filteredRecordList.length > 0 && (
+            <Paper elevation={3} sx={{ marginY: 2 }}>
               <DataGrid
                 rows={rowsWithId}
                 columns={columns}
