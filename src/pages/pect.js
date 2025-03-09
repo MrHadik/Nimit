@@ -68,7 +68,7 @@ function Pect() {
 
         const responseData = await response.json();
         if (responseData.success) {
-          const response = await fetch(`https://hook.eu2.make.com/pv28ymbt6ph9l5kw7z45ugdk3qxrbd3m?title=${record.message}&startDate=${record.date.toLocaleDateString()}&endDate=${record.date.toLocaleDateString()}`, {
+          const response = await fetch(`https://hook.eu2.make.com/pv28ymbt6ph9l5kw7z45ugdk3qxrbd3m?title=${record.message}&startDate=${record.date.toLocaleDateString("en-US")}&endDate=${record.date.toLocaleDateString("en-US")}`, {
             method: 'GET',
           });
           if(!response.ok) {
