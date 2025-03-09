@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import {
-  Box, Stack, Container, CircularProgress, Button, Paper, TextField, Table, TableBody, TableCell,
-  TableContainer, SvgIcon, TableHead, TableRow, Dialog, DialogActions, DialogContent,
+  Box, Stack, Container, CircularProgress, Button, Paper, TextField, SvgIcon, Dialog, DialogActions, DialogContent,
   DialogContentText, DialogTitle
 } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { useSnackbar } from 'notistack';
 import TrashIcon from '@heroicons/react/24/solid/TrashIcon';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 function Pect() {
-  const [allRecordList, setAllRecordList] = useState([]);
   const [filteredRecordList, setFilteredRecordList] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [record, setRecord] = useState({ date: new Date(), message: '', amount: 0, lastBalance: 0 });
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
     getList();
   }, []);
-
-  useEffect(() => {
-    filterRecordsByDate();
-  }, [startDate, endDate, allRecordList]);
 
   const getList = async () => {
     try {
@@ -36,7 +29,6 @@ function Pect() {
       const responseData = await response.json();
 
       if (responseData.success) {
-        setAllRecordList(responseData.records);
         setBalance(responseData.balance);
         setFilteredRecordList(responseData.records); // Set initial filtered records to all records
       }
@@ -46,31 +38,6 @@ function Pect() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const filterRecordsByDate = () => {
-    if (!startDate || !endDate) {
-      setFilteredRecordList(allRecordList); // Show all records if no date filter is applied
-    } else {
-      const filtered = allRecordList.filter((record) => {
-        const recordDate = new Date(record.date);
-        return recordDate >= startDate && recordDate <= endDate;
-      });
-      setFilteredRecordList(filtered);
-    }
-  };
-
-  const handleStartDateChange = (newDate) => {
-    setStartDate(newDate);
-  };
-
-  const handleEndDateChange = (newDate) => {
-    setEndDate(newDate);
-  };
-
-  const handleClearFilters = () => {
-    setStartDate(null);
-    setEndDate(null);
   };
 
   const handleDateChange = (newDate) => {
@@ -172,6 +139,81 @@ function Pect() {
     }
   };
 
+  // Add columns definition
+  const columns = [
+    {
+      field: 'id',
+      headerName: '#',
+      width: 50
+    },
+    {
+      field: 'date',
+      headerName: 'Date',
+      width: 100,
+      valueFormatter: (params) => new Date(params.value).toLocaleDateString('en-IN')
+    },
+    {
+      field: 'message',
+      headerName: 'Message',
+      width: 300,
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{
+          whiteSpace: 'normal',
+          wordWrap: 'break-word',
+          lineHeight: '1.2',
+          padding: '8px 0'
+        }}>
+          {params.value}
+        </div>
+      )
+    },
+    {
+      field: 'lastBalance',
+      headerName: 'Balance',
+      width: 100,
+      valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0
+      }).format(params.value)
+    },
+    {
+      field: 'amount',
+      headerName: 'Amount',
+      width: 100,
+      valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 0
+      }).format(params.value)
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 50,
+      getActions: (params) => [
+        <Button
+          key={params.id}
+          color='error'
+          size="small"
+          onClick={() => handleDeleteRecord(params.row._id)}
+        >
+          <SvgIcon fontSize="small">
+            <TrashIcon />
+          </SvgIcon>
+        </Button>
+      ]
+    }
+  ];
+
+  // Add ID field to your records
+  const rowsWithId = filteredRecordList.map((row, index) => ({
+    ...row,
+    id: index + 1
+  }));
+
   return (
     <>
       <Head>
@@ -227,7 +269,7 @@ function Pect() {
             </Stack>
           </Paper>
 
-          <Paper elevation={3} sx={{ padding: 5, marginTop: 2 }}>
+          {/* <Paper elevation={3} sx={{ padding: 5, marginTop: 2 }}>
             <Stack spacing={2} direction="row" justifyContent="space-between">
               <MobileDatePicker
                 label="Start Date"
@@ -252,7 +294,7 @@ function Pect() {
                 Clear Filters
               </Button>
             </Stack>
-          </Paper>
+          </Paper> */}
 
           {filteredRecordList.length > 0 && (
             <Paper elevation={3} sx={{ padding: 5, marginY: 2 }}>
@@ -268,52 +310,33 @@ function Pect() {
                 Clear Records
               </Button>
 
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>#</TableCell>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Message</TableCell>
-                      <TableCell>Balance</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Delete</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredRecordList.map((row, index) => (
-                      <TableRow key={row._id}>
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{new Date(row.date).toLocaleDateString('en-IN')}</TableCell>
-                        <TableCell>{row.message}</TableCell>
-                        <TableCell>{new Intl.NumberFormat('en-IN', {
-                          style: 'currency',
-                          currency: 'INR',
-                          minimumFractionDigits: 0
-                        }).format(row.lastBalance)}
-                        </TableCell>
-                        <TableCell>{new Intl.NumberFormat('en-IN', {
-                          style: 'currency',
-                          currency: 'INR',
-                          minimumFractionDigits: 0
-                        }).format(row.amount)}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            color='error'
-                            size="sm"
-                            onClick={() => handleDeleteRecord(row._id)}
-                          >
-                            <SvgIcon fontSize="small">
-                              <TrashIcon />
-                            </SvgIcon>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <DataGrid
+                rows={rowsWithId}
+                columns={columns}
+                loading={loading}
+                getRowHeight={() => 'auto'}
+                slots={{ toolbar: GridToolbar }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
+                  },
+                }}
+                pageSizeOptions={[5, 10, 50, 100]}
+                disableRowSelectionOnClick
+                editMode="false"
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+                sx={{
+                  '& .MuiDataGrid-cell': {
+                    whiteSpace: 'normal'
+                  }
+                }}
+              />
             </Paper>
           )}
 
