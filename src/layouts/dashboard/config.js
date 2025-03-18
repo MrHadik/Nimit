@@ -3,6 +3,7 @@ import UsersIcon from '@heroicons/react/24/solid/UsersIcon'
 import { SvgIcon } from '@mui/material'
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop'
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react'
 import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth'
 import BusinessIcon from '@mui/icons-material/Business'
@@ -60,6 +61,15 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <CurrencyRupeeIcon />
+      </SvgIcon>
+    ),
+  },
+  {
+    title: 'Calendar',
+    path: '/calendar',
+    icon: (
+      <SvgIcon fontSize="small">
+        <CalendarMonthIcon />
       </SvgIcon>
     ),
   },

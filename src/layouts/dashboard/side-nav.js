@@ -14,8 +14,8 @@ export const SideNav = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'))
   var links = items
 
-  if(window.location.host !== 'nimit.vercel.app' && window.location.host !== 'localhost:3000' ) {
-    links =  items.filter((item) => item.title !== 'PECT')
+  if(window.location.host !== 'nimit.vercel.app' && window.location.host !== 'localhost:3000' && window.location.host !== 'localhost:3001' ) {
+    links =  items.filter((item) => item.title !== 'PECT' && item.title !== 'Calendar')
   }
 
   const content = (
