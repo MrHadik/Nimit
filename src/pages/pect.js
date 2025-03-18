@@ -170,7 +170,7 @@ function Pect() {
     {
       field: 'lastBalance',
       headerName: 'Old Balance',
-      width: 120,
+      width: 150,
       valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
         style: 'currency',
         currency: 'INR',
@@ -180,7 +180,7 @@ function Pect() {
     {
       field: 'amount',
       headerName: 'Amount',
-      width: 100,
+      width: 150,
       valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
         style: 'currency',
         currency: 'INR',
