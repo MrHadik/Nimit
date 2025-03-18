@@ -6,6 +6,7 @@ import { SideNav } from './side-nav'
 import { TopNav } from './top-nav'
 import React from 'react'
 import { alpha } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
 
 const SIDE_NAV_WIDTH = 280
 
@@ -30,6 +31,7 @@ export const Layout = withAuthGuard((props) => {
   const { children } = props
   const pathname = usePathname()
   const [openNav, setOpenNav] = useState(false)
+  const router = useRouter();
 
   const handlePathnameChange = useCallback(() => {
     if (openNav) {
@@ -39,6 +41,9 @@ export const Layout = withAuthGuard((props) => {
 
   useEffect(() => {
     handlePathnameChange()
+    if (localStorage.getItem("authenticated") !== "true") {
+      router.push('/auth/login');
+    }
   }, [pathname])
 
   return (

@@ -114,7 +114,6 @@ async function handleDeleteRequest(req: NextApiRequest, res: NextApiResponse) {
     if (!date) {
       return res.status(400).json({ error: "Date is required" });
     }
-    console.log(date)
     await BookingModel.deleteOne({ date });
     res.status(200).json({ message: "Booking deleted successfully" });
   } catch (error) {

@@ -163,6 +163,7 @@ export const AuthProvider = (props) => {
   }
 
   const signOut = () => {
+    localStorage.clear()
     dispatch({
       type: HANDLERS.SIGN_OUT,
     })
