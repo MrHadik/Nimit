@@ -68,9 +68,9 @@ function Pect() {
 
         const responseData = await response.json();
         if (responseData.success) {
-          const response = await fetch(`https://hook.eu2.make.com/pv28ymbt6ph9l5kw7z45ugdk3qxrbd3m?title=${record.message}&startDate=${record.date.toLocaleDateString("en-US")}&endDate=${record.date.toLocaleDateString("en-US")}`, {
+          const response = await fetch(`https://hook.eu2.make.com/pv28ymbt6ph9lasdfasdfk3qxrbd3m?title=${encodeURIComponent(record.message.replace(/&/g, "and"))}&startDate=${encodeURIComponent(record.date.toLocaleDateString("en-US"))}&endDate=${encodeURIComponent(record.date.toLocaleDateString("en-US"))}`, {
             method: 'GET',
-          });
+        });
           if(!response.ok) {
             enqueueSnackbar('Error in Google Calendar', { variant: 'warning' });
           }
@@ -169,7 +169,7 @@ function Pect() {
     },
     {
       field: 'lastBalance',
-      headerName: 'Balance',
+      headerName: 'Old Balance',
       width: 120,
       valueFormatter: (params) => new Intl.NumberFormat('en-IN', {
         style: 'currency',
